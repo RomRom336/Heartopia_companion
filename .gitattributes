@@ -1,0 +1,3 @@
+# Normalise les fins de ligne : LF dans le repo, CRLF sur Windows au checkout
+* text=auto eol=lf
+*.bat text eol=crlf

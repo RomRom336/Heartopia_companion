@@ -1,0 +1,128 @@
+[
+  {
+    "section": "Zone de Départ et Centre-Ville",
+    "data": [
+      { "name_en": "Large Red Damselfly", "name_fr": "Agrion rouge", "level": 1, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Bord de l'eau", "prices": [35, 52, 70, 140, 280] },
+      { "name_en": "Orange-Tip", "name_fr": "Aurore (Papillon)", "level": 1, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Zone Centrale", "prices": [30, 45, 60, 120, 240] },
+      { "name_en": "Common Blue Butterfly", "name_fr": "Argus bleu", "level": 2, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Zone Centrale", "prices": [105, 157, 210, 300, 600] },
+      { "name_en": "Sulkowsky's Morpho", "name_fr": "Morpho de Sulkowsky", "level": 2, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Attracteur d'insectes gonflable", "prices": [90, 135, 180, 360, 720] },
+      { "name_en": "Common Whitetail", "name_fr": "Libellule à queue blanche", "level": 4, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Rive de la rivière", "prices": [75, 112, 150, 300, 600] }
+    ]
+  },
+  {
+    "section": "Événement Appât (Bait Event)",
+    "data": [
+      { "name_en": "Apollo", "name_fr": "Apollon", "level": 1, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Événement Appât", "prices": [30, 45, 60, 120, 240] },
+      { "name_en": "Postman Butterfly", "name_fr": "Papillon facteur", "level": 1, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Événement Appât", "prices": [30, 45, 60, 120, 240] },
+      { "name_en": "Pink Katydid", "name_fr": "Sauterelle rose", "level": 3, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Événement Appât", "prices": [90, 135, 180, 360, 720] },
+      { "name_en": "White Witch", "name_fr": "Sorcière blanche (Phalène)", "level": 6, "weather": ["Soleil", "Arc-en-ciel"], "time": "Toute la journée", "location": "Événement Appât", "prices": [90, 135, 180, 360, 720] },
+      { "name_en": "Chestnut Tiger", "name_fr": "Grand monarque oriental", "level": 7, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Événement Appât", "prices": [150, 225, 300, 600, 1200] },
+      { "name_en": "Rainbow Stag Beetle", "name_fr": "Lucane arc-en-ciel", "level": 10, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Ruines de l'Événement", "prices": [440, 660, 880, 1760, 3520] }
+    ]
+  },
+  {
+    "section": "Terrains Privés et Rochers",
+    "data": [
+      { "name_en": "European Firebug", "name_fr": "Gendarme", "level": 1, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Rochers du terrain", "prices": [35, 52, 70, 140, 280] },
+      { "name_en": "Amethyst Flower Beetle", "name_fr": "Cetoine améthyste", "level": 2, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Rochers du terrain", "prices": [165, 247, 330, 660, 1320] },
+      { "name_en": "Rajah Brooke's Birdwing", "name_fr": "Ornithoptère de Brooke", "level": 3, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "19:00 - 13:00", "location": "Terrains privés", "prices": [90, 135, 180, 360, 720] }
+    ]
+  },
+  {
+    "section": "Banlieue (Suburbs)",
+    "data": [
+      { "name_en": "Common Brimstone", "name_fr": "Citron (Papillon)", "level": 1, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Banlieue", "prices": [30, 45, 60, 120, 240] },
+      { "name_en": "Four-Spotted Skimmer", "name_fr": "Libellule à quatre taches", "level": 2, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Rive de la banlieue", "prices": [75, 112, 150, 300, 600] },
+      { "name_en": "Seven-Spotted Ladybug", "name_fr": "Coccinelle à sept points", "level": 2, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Banlieue", "prices": [110, 165, 220, 440, 880] },
+      { "name_en": "Mini Moon Moth", "name_fr": "Mini papillon lune", "level": 3, "weather": ["Soleil", "Arc-en-ciel"], "time": "19:00 - 13:00", "location": "Banlieue", "prices": [105, 158, 210, 420, 840] },
+      { "name_en": "Large Banded Grasshopper", "name_fr": "Criquet à bandes noires", "level": 4, "weather": ["Soleil", "Arc-en-ciel"], "time": "13:00 - 07:00", "location": "Banlieue", "prices": [140, 210, 280, 460, 1120] },
+      { "name_en": "Green Birdwing", "name_fr": "Ornithoptère vert", "level": 6, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "19:00 - 07:00", "location": "Banlieue", "prices": [150, 225, 300, 600, 1200] },
+      { "name_en": "Comet Moth", "name_fr": "Papillon comète", "level": 8, "weather": ["Soleil", "Arc-en-ciel"], "time": "19:00 - 07:00", "location": "Banlieue", "prices": [240, 360, 480, 960, 1920] },
+      { "name_en": "Queen Alexandra's Birdwing", "name_fr": "Ornithoptère de la Reine Alexandra", "level": 11, "weather": ["Soleil", "Arc-en-ciel"], "time": "18:00 - 06:00", "location": "Rive de la banlieue", "prices": [0, 0, 0, 0, 0] },
+      { "name_en": "Gorgeous Damselfly", "name_fr": "Demoiselle magnifique", "level": 13, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "12:00 - 00:00", "location": "Rive de la banlieue", "prices": [0, 0, 0, 0, 0] }
+    ]
+  },
+  {
+    "section": "Village de Pêcheurs",
+    "data": [
+      { "name_en": "Cabbage White", "name_fr": "Piéride du chou", "level": 1, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Village", "prices": [30, 45, 60, 120, 240] },
+      { "name_en": "Siberian Grasshopper", "name_fr": "Criquet de Sibérie", "level": 2, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Village", "prices": [90, 135, 180, 360, 720] },
+      { "name_en": "Ant", "name_fr": "Fourmi", "level": 3, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Place du Village", "prices": [220, 330, 440, 880, 1760] },
+      { "name_en": "Beautiful Leopard", "name_fr": "Lépidoptère léopard", "level": 4, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "19:00 - 13:00", "location": "Quai du Village", "prices": [90, 135, 180, 360, 720] },
+      { "name_en": "Blue Shieldbug", "name_fr": "Punaise bleue", "level": 6, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "07:00 - 19:00", "location": "Phare du Village", "prices": [110, 165, 220, 440, 880] },
+      { "name_en": "Horned Beetle", "name_fr": "Scarabée cornu", "level": 8, "weather": ["Soleil", "Arc-en-ciel"], "time": "18:00 - 06:00", "location": "Jetée Est", "prices": [275, 412, 550, 1100, 2200] },
+      { "name_en": "Cerulean Carpenter", "name_fr": "Abeille charpentière céruléenne", "level": 9, "weather": ["Arc-en-ciel"], "time": "18:00 - 06:00", "location": "Place du Village", "prices": [440, 660, 880, 1760, 3520] }
+    ]
+  },
+  {
+    "section": "Mont Onsen",
+    "data": [
+      { "name_en": "Gold Grasshoppers", "name_fr": "Criquet doré", "level": 1, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Mont Onsen", "prices": [45, 67, 90, 180, 360] },
+      { "name_en": "Green Tiger Beetle", "name_fr": "Cicindèle verte", "level": 2, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Mont Onsen", "prices": [110, 165, 220, 440, 880] },
+      { "name_en": "Fire-Colored Beetle", "name_fr": "Cardinal (Insecte)", "level": 3, "weather": ["Soleil", "Pluie", "Arc-en-ciel"], "time": "Toute la journée", "location": "Mont Onsen", "prices": [110, 165, 220, 440, 880] },
+      { "name_en": "Four-Spotted Ladybug", "name_fr": "Coccinelle à quatre points", "level": 4, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Lac du Cratère", "prices": [165, 247, 330, 660, 1320] },
+      { "name_en": "Hercules Beetle", "name_fr": "Scarabée Hercule", "level": 10, "weather": ["Soleil", "Arc-en-ciel"], "time": "12:00 - 00:00", "location": "Lac du Cratère", "prices": [440, 660, 880, 1760, 3520] },
+      { "name_en": "Mediterranean Mantis", "name_fr": "Mante méditerranéenne", "level": 5, "weather": ["Soleil", "Arc-en-ciel"], "time": "13:00 - 07:00", "location": "Falaise rocheuse", "prices": [195, 292, 390, 780, 1560] },
+      { "name_en": "Giant Asian Mantis", "name_fr": "Mante géante d'Asie", "level": 5, "weather": ["Soleil", "Arc-en-ciel"], "time": "Toute la journée", "location": "Ruines d'Onsen", "prices": [390, 585, 780, 1560, 3120] },
+      { "name_en": "Mourning Cloak", "name_fr": "Moro-sphinx", "level": 5, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "01:00 - 19:00", "location": "Mont Onsen", "prices": [90, 135, 180, 360, 720] },
+      { "name_en": "Silver Jewel Scarab", "name_fr": "Scarabée bijou argenté", "level": 6, "weather": ["Soleil", "Arc-en-ciel"], "time": "01:00 - 19:00", "location": "Falaise rocheuse", "prices": [165, 247, 330, 660, 1320] },
+      { "name_en": "Crimson Marsh Glider", "name_fr": "Libellule pourpre des marais", "level": 7, "weather": ["Arc-en-ciel"], "time": "13:00 - 19:00", "location": "Bord du lac", "prices": [185, 277, 370, 740, 1480] },
+      { "name_en": "Minotaur Beetle", "name_fr": "Minotaure (Scarabée)", "level": 8, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "01:00 - 19:00", "location": "Ruines d'Onsen", "prices": [275, 412, 550, 1100, 2200] },
+      { "name_en": "Conehead Mantis", "name_fr": "Mante à tête conique", "level": 9, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "11:00 - 00:00", "location": "Ruines d'Onsen", "prices": [515, 772, 1030, 2060, 4120] },
+      { "name_en": "Orchid Mantis", "name_fr": "Mante orchidée", "level": 11, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "06:00 - 18:00", "location": "Ruines d'Onsen", "prices": [0, 0, 0, 0, 0] },
+      { "name_en": "Milkweed Grasshopper", "name_fr": "Criquet de l'asclépiade", "level": 12, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "06:00 - 18:00", "location": "Lac d'Onsen", "prices": [0, 0, 0, 0, 0] },
+      { "name_en": "Dream Glow Butterfly", "name_fr": "Papillon éclat de rêve", "level": 13, "weather": ["Arc-en-ciel"], "time": "12:00 - 00:00", "location": "Cratère du lac d'Onsen", "prices": [0, 0, 0, 0, 0] }
+    ]
+  },
+  {
+    "section": "Forêt de Pins du Chêne Spirituel",
+    "data": [
+      { "name_en": "Cicada", "name_fr": "Cigale", "level": 4, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "13:00 - 07:00", "location": "Forêt de pins", "prices": [220, 330, 440, 880, 1760] },
+      { "name_en": "Blue Morpho", "name_fr": "Morpho bleu", "level": 7, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "07:00 - 13:00", "location": "Forêt de pins", "prices": [150, 225, 300, 600, 1200] },
+      { "name_en": "Spanish Moon Moth", "name_fr": "Isabelle (Papillon)", "level": 9, "weather": ["Soleil", "Arc-en-ciel"], "time": "18:00 - 06:00", "location": "Forêt de pins", "prices": [150, 225, 300, 600, 1200] },
+      { "name_en": "Golden Stag Beetle", "name_fr": "Lucane doré", "level": 9, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "18:00 - 06:00", "location": "Forêt de pins", "prices": [440, 660, 880, 1760, 3520] },
+      { "name_en": "Southeast Asian Giant Rhinoceros Beetle", "name_fr": "Scarabée rhinocéros géant d'Asie", "level": 11, "weather": ["Arc-en-ciel"], "time": "12:00 - 06:00", "location": "Forêt de pins", "prices": [0, 0, 0, 0, 0] }
+    ]
+  },
+  {
+    "section": "Champ de Fleurs",
+    "data": [
+      { "name_en": "Asparagus Beetle", "name_fr": "Criocère de l'asperge", "level": 1, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Champ de fleurs", "prices": [55, 82, 110, 220, 440] },
+      { "name_en": "Bumblebee", "name_fr": "Bourdon", "level": 2, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Champ de fleurs", "prices": [110, 165, 220, 440, 880] },
+      { "name_en": "Katydid", "name_fr": "Sauterelle verte", "level": 3, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Champ de fleurs", "prices": [180, 270, 360, 720, 1440] },
+      { "name_en": "Picasso Bug", "name_fr": "Punaise Picasso", "level": 8, "weather": ["Soleil", "Arc-en-ciel"], "time": "19:00 - 07:00", "location": "Plage d'Améthyste", "prices": [185, 277, 370, 740, 1480] },
+      { "name_en": "Purple Emperor", "name_fr": "Grand Mars changeant", "level": 3, "weather": ["Soleil", "Arc-en-ciel"], "time": "13:00 - 19:00", "location": "Montagne des Baleines", "prices": [90, 135, 180, 360, 720] },
+      { "name_en": "Splay-Footed Carpenter", "name_fr": "Abeille charpentière", "level": 5, "weather": ["Soleil", "Arc-en-ciel"], "time": "Toute la journée", "location": "Montagne des Baleines", "prices": [165, 247, 330, 660, 1320] },
+      { "name_en": "Elegant Flower Beetle", "name_fr": "Cetoine élégante", "level": 7, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "07:00 - 19:00", "location": "Montagne des Baleines", "prices": [275, 412, 550, 1100, 2200] },
+      { "name_en": "Peacock Butterfly", "name_fr": "Paon-du-jour", "level": 5, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Champ de fleurs du Moulin", "prices": [90, 135, 180, 360, 720] },
+      { "name_en": "Mother of Pearl", "name_fr": "Nacre (Papillon)", "level": 9, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "12:00 - 00:00", "location": "Champ de fleurs du Moulin", "prices": [240, 360, 480, 960, 1920] },
+      { "name_en": "Morpho Helena", "name_fr": "Morpho Helena", "level": 10, "weather": ["Arc-en-ciel"], "time": "07:00 - 19:00", "location": "Plage d'Améthyste", "prices": [240, 360, 480, 960, 1920] },
+      { "name_en": "Rose Swallowtail Butterfly", "name_fr": "Voilier rose", "level": 12, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "06:00 - 00:00", "location": "Champ de fleurs du Moulin", "prices": [0, 0, 0, 0, 0] },
+      { "name_en": "Flame Dragonfly", "name_fr": "Libellule de feu", "level": 12, "weather": ["Arc-en-ciel"], "time": "06:00 - 18:00", "location": "Montagne des Baleines", "prices": [0, 0, 0, 0, 0] },
+      { "name_en": "Glasswing Butterfly", "name_fr": "Papillon aux ailes de verre", "level": 14, "weather": ["Arc-en-ciel"], "time": "12:00 - 00:00", "location": "Montagne des Baleines", "prices": [0, 0, 0, 0, 0] }
+    ]
+  },
+  {
+    "section": "Forêt",
+    "data": [
+      { "name_en": "Old World Swallowtail", "name_fr": "Machaon", "level": 1, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Forêt", "prices": [30, 45, 60, 120, 240] },
+      { "name_en": "Wasp Beetle", "name_fr": "Clyte bélier", "level": 3, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Forêt", "prices": [110, 165, 220, 440, 880] },
+      { "name_en": "Waroona Cuckoo Bee", "name_fr": "Abeille coucou de Waroona", "level": 3, "weather": ["Soleil", "Arc-en-ciel"], "time": "07:00 - 01:00", "location": "Tour des cerfs", "prices": [165, 247, 330, 660, 1320] },
+      { "name_en": "Alpine Longhorn Beetle", "name_fr": "Rosalie des Alpes", "level": 5, "weather": ["Arc-en-ciel"], "time": "Toute la journée", "location": "Île de la forêt", "prices": [165, 247, 330, 660, 1320] },
+      { "name_en": "Asian Lady Beetle", "name_fr": "Coccinelle asiatique", "level": 5, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "13:00 - 07:00", "location": "Tour des cerfs", "prices": [165, 247, 330, 660, 1320] },
+      { "name_en": "Beautiful Demoiselle", "name_fr": "Caloptéryx éclatant", "level": 6, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Rive du lac de la forêt", "prices": [110, 165, 220, 440, 880] },
+      { "name_en": "Golden Jewel Scarab", "name_fr": "Scarabée bijou doré", "level": 7, "weather": ["Soleil", "Arc-en-ciel"], "time": "13:00 - 01:00", "location": "Puzzle de saut", "prices": [275, 412, 550, 1100, 2200] },
+      { "name_en": "Stag Beetle", "name_fr": "Lucane cerf-volant", "level": 7, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "06:00 - 12:00", "location": "Puzzle de saut", "prices": [275, 412, 550, 1100, 2200] },
+      { "name_en": "Bagworm Moth", "name_fr": "Psyché (Papillon)", "level": 10, "weather": ["Soleil", "Arc-en-ciel"], "time": "18:00 - 06:00", "location": "Tour des cerfs", "prices": [440, 660, 880, 1760, 3520] },
+      { "name_en": "Sunset Morpho", "name_fr": "Morpho du coucher de soleil", "level": 10, "weather": ["Arc-en-ciel"], "time": "18:00 - 06:00", "location": "Tour des cerfs", "prices": [240, 360, 480, 960, 1920] },
+      { "name_en": "Goliathus Atlas Beetle", "name_fr": "Scarabée Goliath", "level": 12, "weather": ["Arc-en-ciel"], "time": "18:00 - 06:00", "location": "Tour des cerfs", "prices": [0, 0, 0, 0, 0] },
+      { "name_en": "Green Snail", "name_fr": "Escargot vert", "level": 14, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "location": "Île de la forêt", "prices": [0, 0, 0, 0, 0] }
+    ]
+  },
+  {
+    "section": "Zones Spécifiques / Montagnes",
+    "data": [
+      { "name_en": "Little Thirteen-Star Ladybug", "name_fr": "Petite coccinelle à treize points", "level": 11, "weather": ["Arc-en-ciel"], "time": "12:00 - 00:00", "location": "Montagne des Baleines", "prices": [0, 0, 0, 0, 0] }
+    ]
+  }
+]

@@ -1,0 +1,14 @@
+[
+  { "name_en": "Meat", "name_fr": "Viande", "discount_price": 120, "base_price": 200 },
+  { "name_en": "Egg", "name_fr": "Œuf", "discount_price": 60, "base_price": 100 },
+  { "name_en": "Milk", "name_fr": "Lait", "discount_price": 30, "base_price": 50 },
+  { "name_en": "Cheese", "name_fr": "Fromage", "discount_price": 60, "base_price": 100 },
+  { "name_en": "Butter", "name_fr": "Beurre", "discount_price": 90, "base_price": 150 },
+  { "name_en": "CoffeeBeans", "name_fr": "Grains de café", "discount_price": 30, "base_price": 50 },
+  { "name_en": "TeaLeaves", "name_fr": "Feuilles de thé", "discount_price": 150, "base_price": 250 },
+  { "name_en": "MatchaPowder", "name_fr": "Poudre de matcha", "discount_price": 150, "base_price": 250 },
+  { "name_en": "RiceFlour", "name_fr": "Farine de riz", "discount_price": 30, "base_price": 50 },
+  { "name_en": "RedBean", "name_fr": "Haricot rouge", "discount_price": 30, "base_price": 50 },
+  { "name_en": "CookingOil", "name_fr": "Huile de cuisson", "discount_price": 60, "base_price": 100 },
+  { "name_en": "PasturizedEgg", "name_fr": "Œuf pasteurisé", "discount_price": 60, "base_price": 100 }
+]

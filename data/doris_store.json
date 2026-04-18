@@ -1,0 +1,9 @@
+[
+  { "name_en": "BlueSugar", "name_fr": "Sucre Bleu", "base_price": 150 },
+  { "name_en": "IndigoSugar", "name_fr": "Sucre Indigo", "base_price": 150 },
+  { "name_en": "VioletSugar", "name_fr": "Sucre Violet", "base_price": 150 },
+  { "name_en": "RedSugar", "name_fr": "Sucre Rouge", "base_price": 150 },
+  { "name_en": "OrangeSugar", "name_fr": "Sucre Orange", "base_price": 200 },
+  { "name_en": "YellowSugar", "name_fr": "Sucre Jaune", "base_price": 150 },
+  { "name_en": "GreenSugar", "name_fr": "Sucre Vert", "base_price": 200 }
+]

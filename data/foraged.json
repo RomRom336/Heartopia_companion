@@ -1,0 +1,37 @@
+[
+  { "category": "Mushroom", "items": [
+    { "name_en": "Button", "name_fr": "Champignon de Paris", "price": 16 },
+    { "name_en": "Oyster", "name_fr": "Pleurote", "price": 16 },
+    { "name_en": "Shiitake", "name_fr": "Shiitake", "price": 16 },
+    { "name_en": "PennyBun", "name_fr": "Cèpe", "price": 16 },
+    { "name_en": "BlackTruffle", "name_fr": "Truffe noire", "price": 99 },
+    { "name_en": "Matsutake", "name_fr": "Matsutake", "price": 0 } 
+  ]},
+  { "category": "Fruit", "items": [
+    { "name_en": "Blueberry", "name_fr": "Myrtille", "price": 16 },
+    { "name_en": "Raspberry", "name_fr": "Framboise", "price": 26 },
+    { "name_en": "Mandarin", "name_fr": "Mandarine", "price": 28 },
+    { "name_en": "Apple", "name_fr": "Pomme", "price": 28 }
+  ]},
+  { "category": "Wood", "items": [
+    { "name_en": "Bamboo", "name_fr": "Bambou", "price": 7 },
+    { "name_en": "Branch", "name_fr": "Branche", "price": 5 },
+    { "name_en": "Timber", "name_fr": "Bois", "price": 6 },
+    { "name_en": "Quality Timber", "name_fr": "Bois de qualité", "price": 12 },
+    { "name_en": "Rare Timber", "name_fr": "Bois rare", "price": 50 },
+    { "name_en": "Roaming Oak Timber", "name_fr": "Chêne errant", "price": 150 }
+  ]},
+  { "category": "Minerals", "items": [
+    { "name_en": "Stone", "name_fr": "Pierre", "price": 8 },
+    { "name_en": "Ore", "name_fr": "Minerai", "price": 14 },
+    { "name_en": "Flawless Fluorite", "name_fr": "Fluorite pure", "price": 150 },
+    { "name_en": "Starfall Shard", "name_fr": "Éclat d'étoile", "price": 150 }
+  ]},
+  { "category": "Others", "items": [
+    { "name_en": "Party Popper (All Color)", "name_fr": "Cotillon (Toutes couleurs)", "price": 25 },
+    { "name_en": "Dye", "name_fr": "Teinture", "price": 50 },
+    { "name_en": "Colorful Sparkler", "name_fr": "Cierge magique coloré", "price": 150 },
+    { "name_en": "Kite", "name_fr": "Cerf-volant", "price": 600 },
+    { "name_en": "Balloon", "name_fr": "Ballon", "price": 600 }
+  ]}
+]

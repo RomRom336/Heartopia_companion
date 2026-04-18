@@ -1,0 +1,112 @@
+[
+  {
+    "section": "Zones Générales et Aquatiques",
+    "data": [
+      { "name_en": "Greater Flamingo", "name_fr": "Grand Flamant", "level": 1, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "4m", "location": "Bord de l'eau", "prices": [15, 60, 120, 240, 480] },
+      { "name_en": "Mallard", "name_fr": "Canard colvert", "level": 1, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "3m", "location": "Lac", "prices": [12, 50, 100, 200, 400] },
+      { "name_en": "Eurasian Wigeon", "name_fr": "Canard siffleur", "level": 2, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "3m", "location": "Rivière", "prices": [17, 70, 140, 280, 560] },
+      { "name_en": "King Eider", "name_fr": "Eider à tête grise", "level": 3, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "3m", "location": "Rivière", "prices": [17, 70, 140, 280, 560] },
+      { "name_en": "Seagull", "name_fr": "Mouette", "level": 2, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "3m", "location": "Bord de mer", "prices": [17, 70, 140, 280, 560] },
+      { "name_en": "European Shag", "name_fr": "Cormoran huppé", "level": 3, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "4m", "location": "Océan", "prices": [17, 70, 140, 280, 560] }
+    ]
+  },
+  {
+    "section": "Événement Nid des Cent (Nest of Hundreds)",
+    "data": [
+      { "name_en": "Blue Peafowl", "name_fr": "Paon bleu", "level": 1, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "5m", "location": "Événement Nid des Cent", "prices": [10, 40, 80, 160, 320] },
+      { "name_en": "Blue-and-Yellow Macaw", "name_fr": "Ara bleu", "level": 1, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "3m", "location": "Événement Nid des Cent", "prices": [7, 30, 60, 120, 240] },
+      { "name_en": "Red-and-Green Macaw", "name_fr": "Ara chloroptère", "level": 3, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "3m", "location": "Événement Nid des Cent", "prices": [10, 40, 80, 160, 320] },
+      { "name_en": "Great Green Macaw", "name_fr": "Grand Ara vert", "level": 5, "weather": ["Soleil", "Arc-en-ciel"], "time": "18:00 - 00:00", "distance": "3m", "location": "Événement Nid des Cent", "prices": [15, 60, 120, 240, 480] },
+      { "name_en": "Lear's Macaw", "name_fr": "Ara de Lear", "level": 7, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "18:00 - 00:00", "distance": "≤3m", "location": "Événement Nid des Cent", "prices": [22, 90, 180, 360, 720] },
+      { "name_en": "Green Peafowl", "name_fr": "Paon vert", "level": 9, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "5m", "location": "Événement Nid des Cent", "prices": [37, 150, 300, 600, 1200] },
+      { "name_en": "White Peacock", "name_fr": "Paon blanc", "level": 11, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "≤5m", "location": "Événement Nid des Cent", "prices": [0, 0, 0, 0, 0] },
+      { "name_en": "Black Peacock", "name_fr": "Paon noir", "level": 13, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "≤5m", "location": "Événement Nid des Cent", "prices": [0, 0, 0, 0, 0] }
+    ]
+  },
+  {
+    "section": "Banlieue et Terrains Privés (Suburbs & Home Lots)",
+    "data": [
+      { "name_en": "Eurasian Collared Dove", "name_fr": "Tourterelle turque", "level": 1, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "3m", "location": "Terrains privés", "prices": [10, 40, 80, 160, 320] },
+      { "name_en": "Eurasian Golden Oriole", "name_fr": "Loriot d'Europe", "level": 3, "weather": ["Soleil", "Arc-en-ciel"], "time": "06:00 - 00:00", "distance": "≤3m", "location": "Terrains privés", "prices": [15, 60, 120, 240, 480] },
+      { "name_en": "Eurasian Bullfinch", "name_fr": "Bouvreuil pivoine", "level": 1, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "3m", "location": "Banlieue", "prices": [7, 30, 60, 120, 240] },
+      { "name_en": "Woodchat Shrike", "name_fr": "Pie-grièche à tête rousse", "level": 2, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "3m", "location": "Banlieue", "prices": [10, 40, 80, 160, 320] },
+      { "name_en": "Ruddy Shelduck", "name_fr": "Tadorne casarca", "level": 3, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "3m", "location": "Lac de banlieue", "prices": [17, 70, 140, 280, 560] },
+      { "name_en": "Jambu Fruit Dove", "name_fr": "Ptilope jambou", "level": 7, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "06:00 - 00:00", "distance": "3m", "location": "Banlieue", "prices": [27, 110, 220, 440, 880] },
+      { "name_en": "Eastern Bluebird", "name_fr": "Merlebleu de l'Est", "level": 8, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "06:00 - 00:00", "distance": "≤3m", "location": "Banlieue", "prices": [30, 120, 240, 480, 960] },
+      { "name_en": "Paradise Tanager", "name_fr": "Tangara de paradis", "level": 9, "weather": ["Arc-en-ciel"], "time": "06:00 - 00:00", "distance": "≤3m", "location": "Banlieue", "prices": [30, 120, 240, 480, 960] },
+      { "name_en": "Nicobar Pigeon", "name_fr": "Pigeon à camail", "level": 11, "weather": ["Soleil", "Arc-en-ciel"], "time": "12:00 - 06:00", "distance": "3m", "location": "Banlieue", "prices": [0, 0, 0, 0, 0] },
+      { "name_en": "Mute Swan", "name_fr": "Cygne tuberculé", "level": 13, "weather": ["Soleil", "Arc-en-ciel"], "time": "Toute la journée", "distance": "≤5m", "location": "Rive de la banlieue", "prices": [0, 0, 0, 0, 0] },
+      { "name_en": "Black Swan", "name_fr": "Cygne noir", "level": 13, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "06:00 - 18:00", "distance": "≤5m", "location": "Rive de la banlieue", "prices": [0, 0, 0, 0, 0] }
+    ]
+  },
+  {
+    "section": "Zone Centrale (Central Area)",
+    "data": [
+      { "name_en": "Stock Dove", "name_fr": "Pigeon colombin", "level": 1, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "3m", "location": "Zone centrale", "prices": [10, 40, 80, 160, 320] },
+      { "name_en": "Eurasian Robin", "name_fr": "Rouge-gorge familier", "level": 1, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "3m", "location": "Zone centrale", "prices": [7, 30, 60, 120, 240] },
+      { "name_en": "Long-Tailed Tit", "name_fr": "Mésange à longue queue", "level": 1, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "2m", "location": "Tête de Blanc", "prices": [2, 8, 16, 32, 64] }
+    ]
+  },
+  {
+    "section": "Village de Pêcheurs (Fishing Village)",
+    "data": [
+      { "name_en": "Pied Imperial Pigeon", "name_fr": "Carpophage blanc", "level": 1, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "3m", "location": "Village de pêcheurs", "prices": [10, 40, 80, 160, 320] },
+      { "name_en": "Eurasian Nuthatch", "name_fr": "Sittelle d'Europe", "level": 2, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "3m", "location": "Village de pêcheurs", "prices": [10, 40, 80, 160, 320] },
+      { "name_en": "Przevalski's Parrotbill", "name_fr": "Paradoxornis de Przevalski", "level": 4, "weather": ["Soleil", "Arc-en-ciel"], "time": "06:00 - 00:00", "distance": "3m", "location": "Place du village", "prices": [15, 60, 120, 240, 480] },
+      { "name_en": "Yellow Bellied Flycatcher", "name_fr": "Moucherolle à ventre jaune", "level": 5, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "06:00 - 00:00", "distance": "3m", "location": "Quai du village", "prices": [15, 60, 120, 240, 480] },
+      { "name_en": "Cinnamon Ground Dove", "name_fr": "Gallicolombe de Palau", "level": 6, "weather": ["Soleil", "Arc-en-ciel"], "time": "06:00 - 00:00", "distance": "3m", "location": "Jetée Est du village", "prices": [27, 110, 220, 440, 880] },
+      { "name_en": "Double-Barred Finch", "name_fr": "Diamant de Bicheno", "level": 3, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "2m", "location": "Phare du village", "prices": [10, 40, 80, 160, 320] },
+      { "name_en": "Azores Bullfinch", "name_fr": "Bouvreuil des Açores", "level": 10, "weather": ["Arc-en-ciel"], "time": "06:00 - 00:00", "distance": "3m", "location": "Phare du village", "prices": [30, 120, 240, 480, 960] }
+    ]
+  },
+  {
+    "section": "Champ de Fleurs (Flower Field)",
+    "data": [
+      { "name_en": "Pink-Necked Green Pigeon", "name_fr": "Ptilope à cou rose", "level": 2, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "3m", "location": "Champ de fleurs", "prices": [15, 60, 120, 240, 480] },
+      { "name_en": "Eurasian Chaffinch", "name_fr": "Pinson des arbres", "level": 1, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "3m", "location": "Champ de fleurs", "prices": [7, 30, 60, 120, 240] },
+      { "name_en": "White Wagtail", "name_fr": "Bergeronnette grise", "level": 4, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "06:00 - 00:00", "distance": "3m", "location": "Plage d'Améthyste", "prices": [15, 60, 120, 240, 480] },
+      { "name_en": "American Flamingo", "name_fr": "Flamant des Caraïbes", "level": 9, "weather": ["Arc-en-ciel"], "time": "12:00 - 18:00", "distance": "≤4m", "location": "Plage d'Améthyste", "prices": [55, 220, 440, 880, 1760] },
+      { "name_en": "Wallace's Fruit Dove", "name_fr": "Ptilope de Wallace", "level": 4, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "3m", "location": "Moulin du champ de fleurs", "prices": [17, 70, 140, 280, 560] },
+      { "name_en": "Azure Tit", "name_fr": "Mésange azurée", "level": 7, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "06:00 - 00:00", "distance": "3m", "location": "Moulin du champ de fleurs", "prices": [22, 90, 180, 360, 720] },
+      { "name_en": "Pink Pigeon", "name_fr": "Pigeon rose", "level": 8, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "12:00 - 00:00", "distance": "3m", "location": "Montagne des Baleines", "prices": [27, 110, 220, 440, 880] },
+      { "name_en": "Purple Finch", "name_fr": "Roselin pourpré", "level": 11, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "18:00 - 00:00", "distance": "3m", "location": "Moulin du champ de fleurs", "prices": [0, 0, 0, 0, 0] }
+    ]
+  },
+  {
+    "section": "Mont Onsen et Mer Ancienne (Onsen Mountain & Old Sea)",
+    "data": [
+      { "name_en": "Brown Noddy", "name_fr": "Noddi brun", "level": 5, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "3m", "location": "Bord de mer ancienne", "prices": [22, 90, 180, 360, 720] },
+      { "name_en": "Great Tit", "name_fr": "Mésange charbonnière", "level": 1, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "3m", "location": "Mont Onsen", "prices": [7, 30, 60, 120, 240] },
+      { "name_en": "Bearded Reedling", "name_fr": "Mésange à moustaches", "level": 2, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "3m", "location": "Mont Onsen", "prices": [10, 40, 80, 160, 320] },
+      { "name_en": "African Olive Pigeon", "name_fr": "Pigeon roussard", "level": 5, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "06:00 - 00:00", "distance": "4m", "location": "Mont Onsen", "prices": [27, 110, 220, 440, 880] },
+      { "name_en": "Peregrine Falcon", "name_fr": "Faucon pèlerin", "level": 8, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "18:00 - 00:00", "distance": "≤4m", "location": "Mont Onsen", "prices": [65, 260, 520, 1040, 2080] },
+      { "name_en": "Hawfinch", "name_fr": "Gros-bec casse-noyaux", "level": 6, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "06:00 - 00:00", "distance": "3m", "location": "Lac du cratère Onsen", "prices": [15, 60, 120, 240, 480] },
+      { "name_en": "Long Eared Owl", "name_fr": "Hibou moyen-duc", "level": 6, "weather": ["Soleil", "Arc-en-ciel"], "time": "18:00 - 00:00", "distance": "4m", "location": "Falaise d'Onsen", "prices": [47, 190, 380, 760, 1520] },
+      { "name_en": "European Bee-Eater", "name_fr": "Guêpier d'Europe", "level": 5, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "06:00 - 00:00", "distance": "≤3m", "location": "Rive du lac Onsen", "prices": [22, 90, 180, 360, 720] },
+      { "name_en": "White-Headed Duck", "name_fr": "Érable à tête blanche", "level": 9, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "12:00 - 18:00", "distance": "≤3m", "location": "Rive du lac Onsen", "prices": [45, 180, 360, 720, 1440] },
+      { "name_en": "Lady Amherst Pheasant", "name_fr": "Faisan de Lady Amherst", "level": 4, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "3m", "location": "Ruines d'Onsen", "prices": [17, 70, 140, 280, 560] },
+      { "name_en": "Amur Falcon", "name_fr": "Faucon de l'Amour", "level": 10, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "06:00 - 00:00", "distance": "4m", "location": "Ruines d'Onsen", "prices": [65, 260, 520, 1040, 2080] },
+      { "name_en": "Spot-billed Duck", "name_fr": "Canard à bec tacheté", "level": 11, "weather": ["Arc-en-ciel"], "time": "12:00 - 18:00", "distance": "≤3m", "location": "Lac du mont Onsen", "prices": [0, 0, 0, 0, 0] },
+      { "name_en": "Red-billed Leiothrix", "name_fr": "Léiotrix à bec rouge", "level": 12, "weather": ["Arc-en-ciel"], "time": "06:00 - 00:00", "distance": "3m", "location": "Cratère du lac Onsen", "prices": [0, 0, 0, 0, 0] },
+      { "name_en": "Rock Pigeon", "name_fr": "Pigeon biset", "level": 11, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "06:00 - 12:00", "distance": "≤3m", "location": "Côte de la mer ancienne", "prices": [0, 0, 0, 0, 0] }
+    ]
+  },
+  {
+    "section": "Forêt (Forest)",
+    "data": [
+      { "name_en": "Eurasian Wren", "name_fr": "Troglodyte mignon", "level": 1, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "2m", "location": "Forêt", "prices": [7, 30, 60, 120, 240] },
+      { "name_en": "Wonga Pigeon", "name_fr": "Pigeon wonga", "level": 2, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "3m", "location": "Forêt", "prices": [15, 60, 120, 240, 480] },
+      { "name_en": "Silver-Throated Tit", "name_fr": "Mésange à gorge argentée", "level": 3, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "3m", "location": "Puzzle de saut forêt", "prices": [10, 40, 80, 160, 320] },
+      { "name_en": "Verditer Flycatcher", "name_fr": "Gobe-mouche vert-de-gris", "level": 10, "weather": ["Soleil", "Arc-en-ciel"], "time": "06:00 - 00:00", "distance": "3m", "location": "Puzzle de saut forêt", "prices": [30, 120, 240, 480, 960] },
+      { "name_en": "Pine Grosbeak", "name_fr": "Durbec des sapins", "level": 4, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "06:00 - 00:00", "distance": "3m", "location": "Île de la forêt", "prices": [15, 60, 120, 240, 480] },
+      { "name_en": "Smew", "name_fr": "Piette", "level": 4, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "06:00 - 00:00", "distance": "3m", "location": "Lac de la forêt", "prices": [22, 90, 180, 360, 720] },
+      { "name_en": "Lesser Flamingo", "name_fr": "Petit Flamant", "level": 5, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "06:00 - 00:00", "distance": "≤4m", "location": "Rive du lac forêt", "prices": [27, 110, 220, 440, 880] },
+      { "name_en": "Regent Bowerbird", "name_fr": "Jardinier prince-régent", "level": 4, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "06:00 - 00:00", "distance": "3m", "location": "Forêt de pins du chêne spirituel", "prices": [15, 60, 120, 240, 480] },
+      { "name_en": "Redpoll", "name_fr": "Sizerin flammé", "level": 8, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "12:00 - 00:00", "distance": "3m", "location": "Forêt de pins du chêne spirituel", "prices": [22, 90, 180, 360, 720] },
+      { "name_en": "Common Kestrel", "name_fr": "Faucon crécerelle", "level": 7, "weather": ["Soleil", "Arc-en-ciel"], "time": "Toute la journée", "distance": "4m", "location": "Tour des cerfs", "prices": [47, 190, 380, 760, 1520] },
+      { "name_en": "Eagle-Owl", "name_fr": "Grand-duc d'Europe", "level": 10, "weather": ["Pluie", "Neige", "Arc-en-ciel"], "time": "Toute la journée", "distance": "≤4m", "location": "Tour des cerfs", "prices": [65, 260, 520, 1040, 2080] },
+      { "name_en": "Snowy Owl", "name_fr": "Harfang des neiges", "level": 12, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "12:00 - 00:00", "distance": "4m", "location": "Cime des arbres forêt spirituelle", "prices": [0, 0, 0, 0, 0] },
+      { "name_en": "Spectacled Owl", "name_fr": "Chouette à lunettes", "level": 14, "weather": ["Soleil", "Pluie", "Neige", "Arc-en-ciel"], "time": "12:00 - 00:00", "distance": "≤4m", "location": "Plateforme d'observation forêt", "prices": [0, 0, 0, 0, 0] }
+    ]
+  }
+]

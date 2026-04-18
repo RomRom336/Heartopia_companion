@@ -1,0 +1,15 @@
+[
+  { "name_en": "Tomato", "name_fr": "Tomate", "level": 1, "growth_time": "15m", "seed_cost": 10, "price_1": 30, "price_2": 40, "price_3": 50, "price_4": 60, "price_5": 70 },
+  { "name_en": "Potato", "name_fr": "Pomme de terre", "level": 1, "growth_time": "1h", "seed_cost": 30, "price_1": 90, "price_2": 120, "price_3": 150, "price_4": 180, "price_5": 210 },
+  { "name_en": "Wheat", "name_fr": "Blé", "level": 2, "growth_time": "4h", "seed_cost": 95, "price_1": 285, "price_2": 381, "price_3": 475, "price_4": 570, "price_5": 855 },
+  { "name_en": "Lettuce", "name_fr": "Laitue", "level": 3, "growth_time": "8h", "seed_cost": 145, "price_1": 435, "price_2": 582, "price_3": 726, "price_4": 870, "price_5": 1305 },
+  { "name_en": "Pineapple", "name_fr": "Ananas", "level": 4, "growth_time": "30m", "seed_cost": 15, "price_1": 52, "price_2": 69, "price_3": 86, "price_4": 104, "price_5": 118 },
+  { "name_en": "Carrot", "name_fr": "Carotte", "level": 5, "growth_time": "2h", "seed_cost": 50, "price_1": 155, "price_2": 207, "price_3": 258, "price_4": 310, "price_5": 350 },
+  { "name_en": "Strawberry", "name_fr": "Fraise", "level": 6, "growth_time": "6h", "seed_cost": 125, "price_1": 375, "price_2": 502, "price_3": 626, "price_4": 750, "price_5": 1125 },
+  { "name_en": "Corn", "name_fr": "Maïs", "level": 6, "growth_time": "12h", "seed_cost": 170, "price_1": 515, "price_2": 690, "price_3": 860, "price_4": 1030, "price_5": 1545 },
+  { "name_en": "Grapes", "name_fr": "Raisin", "level": 7, "growth_time": "10h", "seed_cost": 160, "price_1": 480, "price_2": 643, "price_3": 801, "price_4": 960, "price_5": 1440 },
+  { "name_en": "Eggplant", "name_fr": "Aubergine", "level": 8, "growth_time": "7h", "seed_cost": 135, "price_1": 406, "price_2": 544, "price_3": 678, "price_4": 812, "price_5": 1218 },
+  { "name_en": "TeaTree", "name_fr": "Arbre à thé", "level": 11, "growth_time": "45m", "seed_cost": 25, "price_1": 75, "price_2": 100, "price_3": 125, "price_4": 150, "price_5": 225 },
+  { "name_en": "Cocoa", "name_fr": "Cacao", "level": 12, "growth_time": "5h", "seed_cost": 110, "price_1": 330, "price_2": 442, "price_3": 551, "price_4": 660, "price_5": 990 },
+  { "name_en": "Avocado", "name_fr": "Avocat", "level": 13, "growth_time": "13h", "seed_cost": 180, "price_1": 540, "price_2": 735, "price_3": 916, "price_4": 1098, "price_5": 1647 }
+]

@@ -1,0 +1,101 @@
+import { create } from 'zustand'
+import type { WeatherType as Weather, TimePeriod } from '@/types/database.types'
+
+export type TrackerCategory = 'Tous' | 'Poissons' | 'Insectes' | 'Oiseaux'
+
+type TrackerState = {
+  // Filtres globaux (persistent entre sous-routes)
+  searchQuery: string
+  hideCaught: boolean
+  maxFishLevel: number
+  maxInsectLevel: number
+  maxBirdLevel: number
+  selectedWeather: Weather[]
+  selectedTime: TimePeriod[]
+
+  // Filtres spécifiques à la sous-route courante (ex: 'location_type' → ['Mer','Lac']).
+  // Remis à vide par TrackerView à chaque changement de catégorie.
+  specificFilters: Record<string, string[]>
+
+  // Capture : item_id → meilleure étoile obtenue (1..5). Absent = jamais attrapé.
+  bestStars: Record<string, number>
+
+  // Actions filtres globaux
+  setSearchQuery: (q: string) => void
+  setHideCaught: (v: boolean) => void
+  setMaxFishLevel: (n: number) => void
+  setMaxInsectLevel: (n: number) => void
+  setMaxBirdLevel: (n: number) => void
+  toggleWeather: (w: Weather) => void
+  toggleTime: (t: TimePeriod) => void
+
+  // Actions filtres spécifiques
+  toggleSpecificFilter: (key: string, value: string) => void
+  clearSpecificFilters: () => void
+
+  // Actions capture
+  setBestStars: (record: Record<string, number>) => void
+  setStar: (id: string, star: number) => void
+  clearStar: (id: string) => void
+
+  reset: () => void
+}
+
+const initialFilters = {
+  searchQuery: '',
+  hideCaught: false,
+  maxFishLevel: 10,
+  maxInsectLevel: 10,
+  maxBirdLevel: 10,
+  selectedWeather: [] as Weather[],
+  selectedTime: [] as TimePeriod[],
+  specificFilters: {} as Record<string, string[]>,
+}
+
+export const useTrackerStore = create<TrackerState>(set => ({
+  ...initialFilters,
+  bestStars: {},
+
+  setSearchQuery: q => set({ searchQuery: q }),
+  setHideCaught: v => set({ hideCaught: v }),
+  setMaxFishLevel: n =>
+    set({ maxFishLevel: Math.max(1, Math.min(100, Math.floor(n) || 1)) }),
+  setMaxInsectLevel: n =>
+    set({ maxInsectLevel: Math.max(1, Math.min(100, Math.floor(n) || 1)) }),
+  setMaxBirdLevel: n =>
+    set({ maxBirdLevel: Math.max(1, Math.min(100, Math.floor(n) || 1)) }),
+  toggleWeather: w =>
+    set(s => ({
+      selectedWeather: s.selectedWeather.includes(w)
+        ? s.selectedWeather.filter(x => x !== w)
+        : [...s.selectedWeather, w],
+    })),
+  toggleTime: t =>
+    set(s => ({
+      selectedTime: s.selectedTime.includes(t)
+        ? s.selectedTime.filter(x => x !== t)
+        : [...s.selectedTime, t],
+    })),
+
+  toggleSpecificFilter: (key, value) =>
+    set(s => {
+      const current = s.specificFilters[key] ?? []
+      const next = current.includes(value)
+        ? current.filter(v => v !== value)
+        : [...current, value]
+      return { specificFilters: { ...s.specificFilters, [key]: next } }
+    }),
+  clearSpecificFilters: () => set({ specificFilters: {} }),
+
+  setBestStars: record => set({ bestStars: record }),
+  setStar: (id, star) =>
+    set(s => ({ bestStars: { ...s.bestStars, [id]: star } })),
+  clearStar: id =>
+    set(s => {
+      if (!(id in s.bestStars)) return s
+      const { [id]: _removed, ...rest } = s.bestStars
+      return { bestStars: rest }
+    }),
+
+  reset: () => set({ ...initialFilters, bestStars: {} }),
+}))
