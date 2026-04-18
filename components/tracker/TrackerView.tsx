@@ -1,10 +1,14 @@
 'use client'
 
-import { useEffect, useMemo, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import Link from 'next/link'
+import { Check, Loader2, MoreHorizontal, Star } from 'lucide-react'
 import { useAuth } from '@/components/auth-provider'
 import { FilterBar } from '@/components/tracker/FilterBar'
 import { ItemCard } from '@/components/tracker/ItemCard'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import type { TrackerItem } from '@/types/database.types'
 import { useTrackerStore, type TrackerCategory } from '@/store/useTrackerStore'
 import { createClient } from '@/utils/supabase/client'
@@ -198,10 +202,107 @@ export function TrackerView({
     [items, bestStars],
   )
 
+  // --- Bouton ⋯ / marquage en masse ---
+  const [menuOpen, setMenuOpen]       = useState(false)
+  const [threshold, setThreshold]     = useState(5)
+  const [massState, setMassState]     = useState<'idle' | 'loading' | 'done'>('idle')
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!menuOpen) return
+    const handler = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [menuOpen])
+
+  const handleMassCatch = async () => {
+    if (!user) return
+    const targets = items.filter(
+      item => item.passion_level <= threshold && bestStars[item.id] == null,
+    )
+    if (targets.length === 0) { setMenuOpen(false); return }
+    setMassState('loading')
+    const supabase = createClient()
+    const rows = targets.map(item => ({
+      user_id:   user.id,
+      item_type: item.type,
+      item_id:   item.id,
+      best_star: 1,
+    }))
+    const { error } = await supabase
+      .from('user_collection')
+      .upsert(rows, { onConflict: 'user_id,item_type,item_id' })
+    if (!error) {
+      for (const item of targets) setStar(item.id, 1)
+      setMassState('done')
+      setTimeout(() => { setMassState('idle'); setMenuOpen(false) }, 1500)
+    } else {
+      console.error('[TrackerView] mass catch error:', error)
+      setMassState('idle')
+    }
+  }
+
   return (
     <main className="container py-8">
       <header className="mb-4 flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
+        <div className="flex items-center justify-between gap-2">
+          <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
+
+          {/* Bouton ⋯ paramètres */}
+          <div className="relative" ref={menuRef}>
+            <button
+              type="button"
+              onClick={() => setMenuOpen(o => !o)}
+              className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              aria-label="Paramètres"
+            >
+              <MoreHorizontal className="h-5 w-5" />
+            </button>
+
+            {menuOpen && (
+              <div className="absolute right-0 top-9 z-50 w-72 rounded-xl border border-border bg-card p-4 shadow-lg">
+                <p className="mb-3 text-sm font-medium">Marquer en attrapé (1★)</p>
+                <p className="mb-3 text-xs text-muted-foreground">
+                  Tous les animaux non attrapés avec un niveau de passion ≤ au seuil seront marqués à 1 étoile.
+                </p>
+                <div className="mb-3 flex items-center gap-3">
+                  <Label htmlFor="mass-threshold" className="whitespace-nowrap text-sm">
+                    Niveau max
+                  </Label>
+                  <Input
+                    id="mass-threshold"
+                    type="number"
+                    min={1}
+                    max={100}
+                    value={threshold}
+                    onChange={e => setThreshold(Math.max(1, Number(e.target.value) || 1))}
+                    className="w-20"
+                  />
+                  <span className="text-xs text-muted-foreground">
+                    ({items.filter(i => i.passion_level <= threshold && bestStars[i.id] == null).length} à marquer)
+                  </span>
+                </div>
+                <Button
+                  size="sm"
+                  className="w-full gap-1.5"
+                  disabled={massState === 'loading'}
+                  onClick={handleMassCatch}
+                >
+                  {massState === 'loading' && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+                  {massState === 'done'    && <Check   className="h-3.5 w-3.5" />}
+                  {massState === 'idle'    && <Star    className="h-3.5 w-3.5" />}
+                  {massState === 'loading' ? 'Enregistrement…'
+                    : massState === 'done'  ? 'Fait !'
+                    : 'Confirmer'}
+                </Button>
+              </div>
+            )}
+          </div>
+        </div>
         <p className="text-sm text-muted-foreground">
           <span className="font-medium text-foreground">{caughtCount}</span> /{' '}
           {items.length} attrapé{caughtCount > 1 ? 's' : ''} —{' '}

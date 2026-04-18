@@ -17,12 +17,16 @@ export default async function FishTrackerPage() {
 
   const items = ((data ?? []) as DbFish[]).map(fishToTrackerItem)
 
+  const exactLocations = Array.from(
+    new Set(items.map(i => i.exact_location).filter(Boolean)),
+  ).sort() as string[]
+
   return (
     <TrackerView
       items={items}
       category="Poissons"
       title="Poissons"
-      specificFilters={<FishFilters />}
+      specificFilters={<FishFilters exactLocations={exactLocations} />}
     />
   )
 }
