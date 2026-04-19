@@ -368,7 +368,6 @@ export function TrackerView({
                           size="sm"
                           variant="destructive"
                           className="flex-1 gap-1.5"
-                          disabled={unmarkState === 'loading'}
                           onClick={handleMassUnmark}
                         >
                           <Trash2 className="h-3.5 w-3.5" />
