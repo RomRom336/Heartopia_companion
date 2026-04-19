@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import Link from 'next/link'
-import { ArrowDownUp, Check, Loader2, MoreHorizontal, Star } from 'lucide-react'
+import { AlertTriangle, ArrowDownUp, Check, Loader2, MoreHorizontal, Star, Trash2 } from 'lucide-react'
 import { useAuth } from '@/components/auth-provider'
 import { FilterBar } from '@/components/tracker/FilterBar'
 import { ItemCard } from '@/components/tracker/ItemCard'
@@ -183,9 +183,10 @@ export function TrackerView({
   const [sortByLocation, setSortByLocation] = useState(false)
 
   // --- Bouton ⋯ / marquage en masse ---
-  const [menuOpen,   setMenuOpen]   = useState(false)
-  const [threshold,  setThreshold]  = useState(5)
-  const [massState,  setMassState]  = useState<'idle' | 'loading' | 'done'>('idle')
+  const [menuOpen,    setMenuOpen]    = useState(false)
+  const [threshold,   setThreshold]   = useState(5)
+  const [massState,   setMassState]   = useState<'idle' | 'loading' | 'done'>('idle')
+  const [unmarkState, setUnmarkState] = useState<'idle' | 'confirm' | 'loading' | 'done'>('idle')
   const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -196,6 +197,27 @@ export function TrackerView({
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
   }, [menuOpen])
+
+  const handleMassUnmark = async () => {
+    if (!user) return
+    const targets = items.filter(i => i.passion_level > threshold && bestStars[i.id] != null)
+    if (targets.length === 0) { setUnmarkState('idle'); setMenuOpen(false); return }
+    setUnmarkState('loading')
+    const supabase = createClient()
+    const { error } = await supabase
+      .from('user_collection')
+      .delete()
+      .eq('user_id', user.id)
+      .in('item_id', targets.map(i => i.id))
+    if (!error) {
+      for (const item of targets) clearStar(item.id)
+      setUnmarkState('done')
+      setTimeout(() => { setUnmarkState('idle'); setMenuOpen(false) }, 1500)
+    } else {
+      console.error('[TrackerView] mass unmark error:', error)
+      setUnmarkState('idle')
+    }
+  }
 
   const handleMassCatch = async () => {
     if (!user) return
@@ -240,20 +262,24 @@ export function TrackerView({
 
           <div className="flex items-center gap-1">
             {/* Bouton tri par lieu / étoiles restantes */}
-            <button
-              type="button"
-              onClick={() => setSortByLocation(v => !v)}
-              className={cn(
-                'rounded-md p-1.5 transition-colors',
-                sortByLocation
-                  ? 'bg-primary/10 text-primary'
-                  : 'text-muted-foreground hover:bg-muted hover:text-foreground',
-              )}
-              aria-label="Trier par lieu / étoiles restantes"
-              title="Trier par lieu / étoiles restantes"
-            >
-              <ArrowDownUp className="h-5 w-5" />
-            </button>
+            <div className="group relative">
+              <button
+                type="button"
+                onClick={() => setSortByLocation(v => !v)}
+                className={cn(
+                  'rounded-md p-1.5 transition-colors',
+                  sortByLocation
+                    ? 'bg-primary/10 text-primary'
+                    : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+                )}
+                aria-label="Trier par lieu à visiter pour obtenir le plus d'étoiles manquantes"
+              >
+                <ArrowDownUp className="h-5 w-5" />
+              </button>
+              <div className="pointer-events-none absolute right-0 top-10 z-50 w-64 rounded-lg border border-border bg-popover px-3 py-2 text-xs text-popover-foreground shadow-md opacity-0 transition-opacity group-hover:opacity-100">
+                Trier par lieu à visiter pour obtenir le plus d'étoiles manquantes — regroupe les créatures par lieu précis, du plus d'étoiles à gagner au moins.
+              </div>
+            </div>
 
             {/* Bouton ⋯ paramètres */}
             <div className="relative" ref={menuRef}>
@@ -267,13 +293,15 @@ export function TrackerView({
               </button>
 
               {menuOpen && (
-                <div className="absolute right-0 top-9 z-50 w-72 rounded-xl border border-border bg-card p-4 shadow-lg">
-                  <p className="mb-3 text-sm font-medium">Marquer en attrapé (1★)</p>
+                <div className="absolute right-0 top-9 z-50 w-80 rounded-xl border border-border bg-card p-4 shadow-lg">
+
+                  {/* Section 1 — Marquer attrapé */}
+                  <p className="mb-1 text-sm font-medium">Marquer en attrapé (1★)</p>
                   <p className="mb-3 text-xs text-muted-foreground">
-                    Tous les animaux non attrapés avec un niveau de passion ≤ au seuil seront marqués à 1 étoile.
+                    Animaux non attrapés avec passion ≤ seuil → marqués à 1★.
                   </p>
                   <div className="mb-3 flex items-center gap-3">
-                    <Label htmlFor="mass-threshold" className="whitespace-nowrap text-sm">Niveau max</Label>
+                    <Label htmlFor="mass-threshold" className="whitespace-nowrap text-sm">Niveau ≤</Label>
                     <Input
                       id="mass-threshold"
                       type="number"
@@ -293,6 +321,79 @@ export function TrackerView({
                     {massState === 'idle'    && <Star    className="h-3.5 w-3.5" />}
                     {massState === 'loading' ? 'Enregistrement…' : massState === 'done' ? 'Fait !' : 'Confirmer'}
                   </Button>
+
+                  <div className="my-4 border-t border-border" />
+
+                  {/* Section 2 — Retirer le statut */}
+                  <p className="mb-1 text-sm font-medium">Retirer le statut attrapé</p>
+                  <p className="mb-3 text-xs text-muted-foreground">
+                    Animaux déjà attrapés avec passion &gt; seuil → remis à non attrapé.
+                  </p>
+                  <div className="mb-3 flex items-center gap-3">
+                    <Label htmlFor="unmark-threshold" className="whitespace-nowrap text-sm">Niveau &gt;</Label>
+                    <Input
+                      id="unmark-threshold"
+                      type="number"
+                      min={1}
+                      max={100}
+                      value={threshold}
+                      onChange={e => setThreshold(Math.max(1, Number(e.target.value) || 1))}
+                      className="w-20"
+                    />
+                    <span className="text-xs text-muted-foreground">
+                      ({items.filter(i => i.passion_level > threshold && bestStars[i.id] != null).length} concernés)
+                    </span>
+                  </div>
+
+                  {unmarkState === 'confirm' ? (
+                    <div className="space-y-3">
+                      <div className="flex items-start gap-2 rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-xs text-destructive">
+                        <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+                        <span>
+                          Vous allez perdre{' '}
+                          <strong>{items.filter(i => i.passion_level > threshold && bestStars[i.id] != null).length} animaux</strong>{' '}
+                          enregistrés. Cette action est irréversible.
+                        </span>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="flex-1"
+                          onClick={() => setUnmarkState('idle')}
+                        >
+                          Annuler
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          className="flex-1 gap-1.5"
+                          disabled={unmarkState === 'loading'}
+                          onClick={handleMassUnmark}
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                          Confirmer
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="w-full gap-1.5"
+                      disabled={unmarkState === 'loading'}
+                      onClick={() => {
+                        const count = items.filter(i => i.passion_level > threshold && bestStars[i.id] != null).length
+                        if (count === 0) return
+                        setUnmarkState('confirm')
+                      }}
+                    >
+                      {unmarkState === 'loading' && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+                      {unmarkState === 'done'    && <Check   className="h-3.5 w-3.5" />}
+                      {unmarkState === 'idle'    && <Trash2  className="h-3.5 w-3.5" />}
+                      {unmarkState === 'loading' ? 'Suppression…' : unmarkState === 'done' ? 'Fait !' : 'Retirer'}
+                    </Button>
+                  )}
                 </div>
               )}
             </div>
@@ -307,7 +408,7 @@ export function TrackerView({
           {sortByLocation && (
             <span className="ml-2 inline-flex items-center gap-1 text-primary">
               <ArrowDownUp className="h-3 w-3" />
-              Tri par lieu
+              Trié par lieu (étoiles manquantes)
             </span>
           )}
         </p>
@@ -330,7 +431,7 @@ export function TrackerView({
         ))}
       </nav>
 
-      <FilterBar>{specificFilters}</FilterBar>
+      <FilterBar category={category}>{specificFilters}</FilterBar>
 
       {filteredItems.length === 0 ? (
         <p className="mt-16 text-center text-sm text-muted-foreground">

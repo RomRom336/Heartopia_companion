@@ -1,16 +1,16 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Check, ChefHat, Infinity as InfinityIcon, Loader2, Package } from 'lucide-react'
+import { Ban, Check, ChefHat, Infinity as InfinityIcon, Loader2, Package } from 'lucide-react'
 import { InventoryList } from '@/components/kitchen/InventoryList'
 import { RecipeCard } from '@/components/kitchen/RecipeCard'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Switch } from '@/components/ui/switch'
-import { useKitchenStore } from '@/store/useKitchenStore'
+import { useKitchenStore, type KitchenMode } from '@/store/useKitchenStore'
 import { useAuth } from '@/components/auth-provider'
 import { createClient } from '@/utils/supabase/client'
+import { cn } from '@/lib/utils'
 import type { FoodProfitabilityRow, IngredientWithCost } from '@/types/database.types'
 
 type RecipeIngredientRow = {
@@ -24,15 +24,36 @@ export type RealizableFood = {
   maxServings: number | null
 }
 
+const MODES: { value: KitchenMode; label: string; icon: React.ReactNode; description: string }[] = [
+  {
+    value: 'infinite',
+    label: 'Ressources infinies',
+    icon: <InfinityIcon className="h-4 w-4" />,
+    description: "Toutes les recettes accessibles à votre niveau, triées par bénéfice. L'inventaire est ignoré.",
+  },
+  {
+    value: 'inventory',
+    label: 'Mon inventaire',
+    icon: <Package className="h-4 w-4" />,
+    description: 'Uniquement les recettes réalisables avec votre frigo actuel, triées par bénéfice total (profit × portions).',
+  },
+  {
+    value: 'exceptions',
+    label: 'Exceptions',
+    icon: <Ban className="h-4 w-4" />,
+    description: 'Toutes les recettes triées par bénéfice, mais en masquant celles qui utilisent un ingrédient déjà en stock dans votre frigo.',
+  },
+]
+
 export default function CuisinePage() {
   const { user } = useAuth()
   const supabase = useMemo(() => createClient(), [])
 
-  const inventory           = useKitchenStore(s => s.inventory)
-  const cookingLevel        = useKitchenStore(s => s.cookingLevel)
-  const setCookingLevel     = useKitchenStore(s => s.setCookingLevel)
-  const useInventoryMode    = useKitchenStore(s => s.useInventoryMode)
-  const setUseInventoryMode = useKitchenStore(s => s.setUseInventoryMode)
+  const inventory       = useKitchenStore(s => s.inventory)
+  const cookingLevel    = useKitchenStore(s => s.cookingLevel)
+  const setCookingLevel = useKitchenStore(s => s.setCookingLevel)
+  const kitchenMode     = useKitchenStore(s => s.kitchenMode)
+  const setKitchenMode  = useKitchenStore(s => s.setKitchenMode)
 
   const [foods, setFoods]                         = useState<FoodProfitabilityRow[]>([])
   const [ingredients, setIngredients]             = useState<IngredientWithCost[]>([])
@@ -43,7 +64,7 @@ export default function CuisinePage() {
 
   const hydratedRef = useRef(false)
 
-  // 1. Hydratation cooking_passion depuis DB
+  // Hydratation cooking_passion
   useEffect(() => {
     if (!user) return
     let cancelled = false
@@ -54,32 +75,25 @@ export default function CuisinePage() {
         .eq('id', user.id)
         .maybeSingle()
       if (cancelled) return
-      if (!error && data?.cooking_passion != null) {
-        setCookingLevel(data.cooking_passion)
-      }
+      if (!error && data?.cooking_passion != null) setCookingLevel(data.cooking_passion)
       hydratedRef.current = true
     })()
     return () => { cancelled = true }
   }, [user, supabase, setCookingLevel])
 
-  // 2. Sauvegarde manuelle du niveau de cuisine
   const handleSaveCookingLevel = async () => {
     if (!user) return
     setSaving(true)
     const { error } = await supabase
       .from('profiles')
       .upsert({ id: user.id, cooking_passion: cookingLevel }, { onConflict: 'id' })
-    if (error) {
-      console.error('[Cuisine] UPSERT error:', error)
-      setSaving(false)
-      return
-    }
+    if (error) { console.error('[Cuisine] UPSERT error:', error); setSaving(false); return }
     setSaving(false)
     setSaved(true)
     setTimeout(() => setSaved(false), 2000)
   }
 
-  // 3. Fetch plats + ingrédients + recettes
+  // Fetch plats + ingrédients + recettes
   useEffect(() => {
     let cancelled = false
     setLoading(true)
@@ -98,7 +112,6 @@ export default function CuisinePage() {
           .select('food_id, ingredient_id, quantity'),
       ])
       if (cancelled) return
-
       if (foodRes.error) console.error('Food fetch error:', foodRes.error)
       if (ingrRes.error) console.error('Ingredient fetch error:', ingrRes.error)
       if (riRes.error)   console.error('RecipeIngredient fetch error:', riRes.error)
@@ -107,10 +120,8 @@ export default function CuisinePage() {
       setRecipeIngredients((riRes.data ?? []) as RecipeIngredientRow[])
       setIngredients(
         (ingrRes.data ?? []).map((row: {
-          ingredient_id: string
-          ingredient_name: string
-          source_type: string
-          unit_cost: number
+          ingredient_id: string; ingredient_name: string
+          source_type: string; unit_cost: number
         }) => ({
           id: row.ingredient_id,
           name_en: '',
@@ -124,7 +135,6 @@ export default function CuisinePage() {
     return () => { cancelled = true }
   }, [supabase])
 
-  // Index recipe_ingredient par food_id
   const riByFood = useMemo(() => {
     const map = new Map<string, RecipeIngredientRow[]>()
     for (const ri of recipeIngredients) {
@@ -138,33 +148,57 @@ export default function CuisinePage() {
   const realizable = useMemo<RealizableFood[]>(() => {
     const byLevel = foods.filter(f => f.passion_level_required <= cookingLevel)
 
-    if (!useInventoryMode) {
+    // ── Ressources infinies ───────────────────────────────────────
+    if (kitchenMode === 'infinite') {
       return byLevel.map(food => ({ food, maxServings: null } satisfies RealizableFood))
     }
 
-    const result: RealizableFood[] = []
-    for (const food of byLevel) {
-      const rows = riByFood.get(food.food_id) ?? []
-      const trackable = rows.filter(ri => ri.ingredient_id != null)
-
-      // Recette 100% générique → exclue en mode inventaire
-      if (trackable.length === 0) continue
-
-      let maxServings = Infinity
-      for (const ri of trackable) {
-        const have = inventory[ri.ingredient_id!] ?? 0
-        maxServings = Math.min(maxServings, Math.floor(have / ri.quantity))
+    // ── Mon inventaire ────────────────────────────────────────────
+    if (kitchenMode === 'inventory') {
+      const result: RealizableFood[] = []
+      for (const food of byLevel) {
+        const rows = riByFood.get(food.food_id) ?? []
+        const trackable = rows.filter(ri => ri.ingredient_id != null)
+        if (trackable.length === 0) continue
+        let maxServings = Infinity
+        for (const ri of trackable) {
+          const have = inventory[ri.ingredient_id!] ?? 0
+          maxServings = Math.min(maxServings, Math.floor(have / ri.quantity))
+        }
+        const servings = maxServings === Infinity ? 0 : maxServings
+        if (servings >= 1) result.push({ food, maxServings: servings })
       }
-      const servings = maxServings === Infinity ? 0 : maxServings
-      if (servings >= 1) result.push({ food, maxServings: servings })
+      return result.sort((a, b) =>
+        (b.food.net_profit_1_star ?? 0) * (b.maxServings ?? 0) -
+        (a.food.net_profit_1_star ?? 0) * (a.maxServings ?? 0),
+      )
     }
 
-    return result.sort((a, b) => {
-      const aProfit = (a.food.net_profit_1_star ?? 0) * (a.maxServings ?? 0)
-      const bProfit = (b.food.net_profit_1_star ?? 0) * (b.maxServings ?? 0)
-      return bProfit - aProfit
-    })
-  }, [foods, cookingLevel, useInventoryMode, riByFood, inventory])
+    // ── Exceptions ────────────────────────────────────────────────
+    // Toutes les recettes triées par bénéfice, SAUF celles qui
+    // utilisent au moins un ingrédient déjà en stock dans le frigo.
+    const inStock = new Set(
+      Object.entries(inventory)
+        .filter(([, qty]) => qty > 0)
+        .map(([id]) => id),
+    )
+
+    return byLevel
+      .filter(food => {
+        const rows = riByFood.get(food.food_id) ?? []
+        return !rows.some(ri => ri.ingredient_id != null && inStock.has(ri.ingredient_id))
+      })
+      .map(food => ({ food, maxServings: null } satisfies RealizableFood))
+  }, [foods, cookingLevel, kitchenMode, riByFood, inventory])
+
+  const currentMode = MODES.find(m => m.value === kitchenMode)!
+  const fridgeActive = kitchenMode !== 'infinite'
+
+  const emptyMsg = kitchenMode === 'inventory'
+    ? 'Aucune recette réalisable avec votre inventaire actuel.'
+    : kitchenMode === 'exceptions'
+    ? 'Aucune recette disponible (tous les plats utilisent au moins un ingrédient en stock).'
+    : 'Aucune recette accessible à votre niveau de cuisine actuel.'
 
   return (
     <main className="container py-8">
@@ -178,7 +212,9 @@ export default function CuisinePage() {
         </p>
       </header>
 
-      <div className="mb-6 flex flex-col gap-3 rounded-lg border border-border bg-card p-4 sm:flex-row sm:items-center sm:justify-between">
+      {/* Barre de contrôle */}
+      <div className="mb-6 flex flex-col gap-4 rounded-lg border border-border bg-card p-4">
+        {/* Niveau de cuisine */}
         <div className="flex items-center gap-3">
           <Label htmlFor="cooking-level" className="whitespace-nowrap">
             Niveau de cuisine
@@ -194,38 +230,43 @@ export default function CuisinePage() {
           />
           {user && (
             <Button size="sm" variant="outline" onClick={handleSaveCookingLevel} disabled={saving}>
-              {saving ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : saved ? <Check className="mr-1.5 h-3.5 w-3.5" /> : null}
+              {saving ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
+                : saved ? <Check className="mr-1.5 h-3.5 w-3.5" /> : null}
               {saved ? 'Sauvegardé' : 'Sauvegarder'}
             </Button>
           )}
         </div>
 
-        <div className="flex items-center gap-3">
-          <Label
-            htmlFor="inventory-mode"
-            className="flex cursor-pointer items-center gap-2 text-sm"
-          >
-            {useInventoryMode ? (
-              <Package className="h-4 w-4 text-accent" />
-            ) : (
-              <InfinityIcon className="h-4 w-4 text-primary" />
-            )}
-            {useInventoryMode ? 'Mon inventaire' : 'Ressources infinies'}
-          </Label>
-          <Switch
-            id="inventory-mode"
-            checked={useInventoryMode}
-            onCheckedChange={setUseInventoryMode}
-            aria-label="Utiliser mon inventaire"
-          />
+        {/* Sélecteur de mode — 3 états */}
+        <div className="flex flex-col gap-2">
+          <div className="flex overflow-hidden rounded-lg border border-border">
+            {MODES.map(m => (
+              <button
+                key={m.value}
+                type="button"
+                onClick={() => setKitchenMode(m.value)}
+                className={cn(
+                  'flex flex-1 items-center justify-center gap-2 px-3 py-2 text-sm font-medium transition-colors',
+                  kitchenMode === m.value
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-muted-foreground hover:bg-muted',
+                )}
+              >
+                {m.icon}
+                <span className="hidden sm:inline">{m.label}</span>
+              </button>
+            ))}
+          </div>
+          {/* Description du mode actif */}
+          <p className="text-xs text-muted-foreground">{currentMode.description}</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* Mon Frigo */}
-        <section className={useInventoryMode ? '' : 'opacity-60'}>
+        <section className={fridgeActive ? '' : 'opacity-60'}>
           <h2 className="mb-3 text-lg font-semibold">Mon Frigo</h2>
-          {!useInventoryMode && (
+          {!fridgeActive && (
             <p className="mb-3 rounded-md border border-dashed border-border bg-muted/30 p-3 text-xs text-muted-foreground">
               Mode ressources infinies : l'inventaire est ignoré pour le calcul des recettes.
             </p>
@@ -233,7 +274,7 @@ export default function CuisinePage() {
           {loading ? (
             <p className="text-sm text-muted-foreground">Chargement…</p>
           ) : (
-            <InventoryList ingredients={ingredients} />
+            <InventoryList ingredients={ingredients} mode={kitchenMode === 'exceptions' ? 'toggle' : 'quantity'} />
           )}
         </section>
 
@@ -245,7 +286,6 @@ export default function CuisinePage() {
               ({realizable.length} recette{realizable.length > 1 ? 's' : ''})
             </span>
           </h2>
-
           {loading ? (
             <p className="text-sm text-muted-foreground">Chargement…</p>
           ) : realizable.length > 0 ? (
@@ -256,9 +296,7 @@ export default function CuisinePage() {
             </div>
           ) : (
             <p className="rounded-md border border-dashed border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
-              {useInventoryMode
-                ? 'Aucune recette réalisable avec votre inventaire actuel.'
-                : 'Aucune recette accessible à votre niveau de cuisine actuel.'}
+              {emptyMsg}
             </p>
           )}
         </section>

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import type { FishLocation, ShadowSize } from '@/types/database.types'
 import { useTrackerStore } from '@/store/useTrackerStore'
+import { LocationDropdown } from '@/components/tracker/LocationDropdown'
 
 const LOCATIONS: FishLocation[] = ['Mer', 'Lac', 'Rivière']
 const SHADOWS: ShadowSize[] = ['Petit', 'Moyen', 'Grand', 'Doré', 'Bleu', 'Or']
@@ -12,7 +13,6 @@ export function FishFilters({ exactLocations }: { exactLocations: string[] }) {
   const specificFilters = useTrackerStore(s => s.specificFilters)
   const toggle          = useTrackerStore(s => s.toggleSpecificFilter)
   const selType        = specificFilters.location_type   ?? []
-  const selExact       = specificFilters.exact_location  ?? []
   const selShadow      = specificFilters.shadow_size     ?? []
 
   return (
@@ -37,19 +37,9 @@ export function FishFilters({ exactLocations }: { exactLocations: string[] }) {
       {exactLocations.length > 0 && (
         <div className="flex flex-wrap items-center gap-2">
           <Label className="text-xs uppercase tracking-wide text-muted-foreground">
-            Lieu précis
+            Localisation
           </Label>
-          {exactLocations.map(l => (
-            <Button
-              key={l}
-              size="sm"
-              variant={selExact.includes(l) ? 'default' : 'outline'}
-              onClick={() => toggle('exact_location', l)}
-              type="button"
-            >
-              {l}
-            </Button>
-          ))}
+          <LocationDropdown locations={exactLocations} />
         </div>
       )}
 
