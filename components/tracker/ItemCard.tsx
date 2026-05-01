@@ -112,9 +112,13 @@ export function ItemCard({
           ) : (
             <div className="flex flex-wrap gap-1">
               {item.time.map(t => (
-                <span key={t} title={TIME_HOURS[t]}
-                  className="rounded-md border border-border bg-muted/40 px-1.5 py-0.5 text-xs font-medium">
-                  {t}
+                <span key={t} className="group relative">
+                  <span className="rounded-md border border-border bg-muted/40 px-1.5 py-0.5 text-xs font-medium cursor-default">
+                    {t}
+                  </span>
+                  <span className="pointer-events-none absolute bottom-full left-1/2 mb-1.5 -translate-x-1/2 whitespace-nowrap rounded-md border border-border bg-card px-2 py-1 text-xs text-card-foreground shadow-sm opacity-0 transition-opacity group-hover:opacity-100 z-10">
+                    {TIME_HOURS[t]}
+                  </span>
                 </span>
               ))}
             </div>

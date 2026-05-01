@@ -16,6 +16,13 @@ import type { TrackerCategory } from '@/store/useTrackerStore'
 const WEATHERS: WeatherType[] = ['Soleil', 'Pluie', 'Neige', 'Arc-en-ciel']
 const TIMES: TimePeriod[]     = ['Nuit', 'Matin', 'Aprem', 'Soirée']
 
+const TIME_RANGES: Record<TimePeriod, string> = {
+  Nuit:   '1h – 7h',
+  Matin:  '7h – 13h',
+  Aprem:  '13h – 19h',
+  Soirée: '19h – 1h',
+}
+
 const LEVEL_CONFIG: Record<Exclude<TrackerCategory, 'Tous'>, {
   label: string
   field: 'fishing_passion' | 'bug_passion' | 'bird_passion'
@@ -167,15 +174,19 @@ export function FilterBar({
       <div className="flex flex-wrap items-center gap-2">
         <Label className="text-xs uppercase tracking-wide text-muted-foreground">Créneau</Label>
         {TIMES.map(t => (
-          <Button
-            key={t}
-            size="sm"
-            variant={selectedTime.includes(t) ? 'default' : 'outline'}
-            onClick={() => toggleTime(t)}
-            type="button"
-          >
-            {t}
-          </Button>
+          <div key={t} className="group relative">
+            <Button
+              size="sm"
+              variant={selectedTime.includes(t) ? 'default' : 'outline'}
+              onClick={() => toggleTime(t)}
+              type="button"
+            >
+              {t}
+            </Button>
+            <div className="pointer-events-none absolute bottom-full left-1/2 mb-1.5 -translate-x-1/2 whitespace-nowrap rounded-md border border-border bg-card px-2 py-1 text-xs text-card-foreground shadow-sm opacity-0 transition-opacity group-hover:opacity-100">
+              {TIME_RANGES[t]}
+            </div>
+          </div>
         ))}
         {selectedTime.length > 0 && (
           <Button
