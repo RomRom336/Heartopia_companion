@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Bird, Bug, ChefHat, Fish } from 'lucide-react'
+import { Bird, Bug, Cat, ChefHat, Fish } from 'lucide-react'
 import { PassionLevelEditor } from '@/components/PassionLevelEditor'
 
 export default function HomePage() {
@@ -18,7 +18,7 @@ export default function HomePage() {
         </p>
       </section>
 
-      <section className="mt-16 grid w-full max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <section className="mt-16 grid w-full max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <FeatureCard
           href="/tracker/fish"
           icon={<Fish className="h-6 w-6" />}
@@ -42,6 +42,12 @@ export default function HomePage() {
           icon={<ChefHat className="h-6 w-6" />}
           title="Cuisine"
           description="Optimiseur de profits en temps réel."
+        />
+        <FeatureCard
+          href="/chat"
+          icon={<Cat className="h-6 w-6" />}
+          title="Chat 🐱"
+          description="Trouvez les plats préférés de votre chat."
         />
       </section>
 
