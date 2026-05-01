@@ -1,12 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/utils/supabase/server'
 
-/**
- * Callback de confirmation e-mail et OAuth.
- * Supabase redirige ici après clic sur le lien de vérification ;
- * on échange le code contre une session puis on renvoie l'utilisateur
- * sur la destination souhaitée (par défaut : accueil).
- */
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
@@ -14,8 +8,25 @@ export async function GET(request: Request) {
 
   if (code) {
     const supabase = await createClient()
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
-    if (!error) {
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code)
+
+    if (!error && data.user) {
+      // Sauvegarder le username depuis les métadonnées si pas encore en base
+      const username = data.user.user_metadata?.username as string | undefined
+      if (username) {
+        const { data: existing } = await supabase
+          .from('profiles')
+          .select('username')
+          .eq('id', data.user.id)
+          .maybeSingle()
+
+        if (!existing?.username) {
+          await supabase
+            .from('profiles')
+            .upsert({ id: data.user.id, username }, { onConflict: 'id' })
+        }
+      }
+
       return NextResponse.redirect(`${origin}${next}`)
     }
   }

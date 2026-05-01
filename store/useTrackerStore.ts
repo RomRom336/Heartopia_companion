@@ -11,7 +11,9 @@ type TrackerState = {
   maxInsectLevel: number
   maxBirdLevel: number
   selectedWeather: Weather[]
+  strictWeather: boolean
   selectedTime: TimePeriod[]
+  strictTime: boolean
 
   // Filtres spécifiques à la sous-route courante (ex: 'location_type' → ['Mer','Lac']).
   // Remis à vide par TrackerView à chaque changement de catégorie.
@@ -20,6 +22,10 @@ type TrackerState = {
   // Capture : item_id → meilleure étoile obtenue (1..5). Absent = jamais attrapé.
   bestStars: Record<string, number>
 
+  // Ami à activer en mode chasse dès l'arrivée sur /tracker
+  pendingHuntFriend: { id: string; username: string } | null
+  setPendingHuntFriend: (f: { id: string; username: string } | null) => void
+
   // Actions filtres globaux
   setSearchQuery: (q: string) => void
   setHideCaught: (v: boolean) => void
@@ -27,7 +33,9 @@ type TrackerState = {
   setMaxInsectLevel: (n: number) => void
   setMaxBirdLevel: (n: number) => void
   toggleWeather: (w: Weather) => void
+  toggleStrictWeather: () => void
   toggleTime: (t: TimePeriod) => void
+  toggleStrictTime: () => void
 
   // Actions filtres spécifiques
   toggleSpecificFilter: (key: string, value: string) => void
@@ -48,13 +56,17 @@ const initialFilters = {
   maxInsectLevel: 10,
   maxBirdLevel: 10,
   selectedWeather: [] as Weather[],
+  strictWeather: false,
   selectedTime: [] as TimePeriod[],
+  strictTime: false,
   specificFilters: {} as Record<string, string[]>,
 }
 
 export const useTrackerStore = create<TrackerState>(set => ({
   ...initialFilters,
   bestStars: {},
+  pendingHuntFriend: null,
+  setPendingHuntFriend: f => set({ pendingHuntFriend: f }),
 
   setSearchQuery: q => set({ searchQuery: q }),
   setHideCaught: v => set({ hideCaught: v }),
@@ -70,12 +82,14 @@ export const useTrackerStore = create<TrackerState>(set => ({
         ? s.selectedWeather.filter(x => x !== w)
         : [...s.selectedWeather, w],
     })),
+  toggleStrictWeather: () => set(s => ({ strictWeather: !s.strictWeather })),
   toggleTime: t =>
     set(s => ({
       selectedTime: s.selectedTime.includes(t)
         ? s.selectedTime.filter(x => x !== t)
         : [...s.selectedTime, t],
     })),
+  toggleStrictTime: () => set(s => ({ strictTime: !s.strictTime })),
 
   toggleSpecificFilter: (key, value) =>
     set(s => {

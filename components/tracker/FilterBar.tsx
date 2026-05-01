@@ -29,9 +29,13 @@ const LEVEL_CONFIG: Record<Exclude<TrackerCategory, 'Tous'>, {
 export function FilterBar({
   children,
   category,
+  hideCaughtLabel = 'Cacher attrapés',
+  readOnly = false,
 }: {
   children?: ReactNode
   category?: TrackerCategory
+  hideCaughtLabel?: string
+  readOnly?: boolean
 }) {
   const { user } = useAuth()
 
@@ -45,10 +49,14 @@ export function FilterBar({
   const setMaxInsectLevel = useTrackerStore(s => s.setMaxInsectLevel)
   const maxBirdLevel      = useTrackerStore(s => s.maxBirdLevel)
   const setMaxBirdLevel   = useTrackerStore(s => s.setMaxBirdLevel)
-  const selectedWeather   = useTrackerStore(s => s.selectedWeather)
-  const toggleWeather     = useTrackerStore(s => s.toggleWeather)
-  const selectedTime      = useTrackerStore(s => s.selectedTime)
-  const toggleTime        = useTrackerStore(s => s.toggleTime)
+  const selectedWeather      = useTrackerStore(s => s.selectedWeather)
+  const strictWeather        = useTrackerStore(s => s.strictWeather)
+  const toggleWeather        = useTrackerStore(s => s.toggleWeather)
+  const toggleStrictWeather  = useTrackerStore(s => s.toggleStrictWeather)
+  const selectedTime         = useTrackerStore(s => s.selectedTime)
+  const strictTime           = useTrackerStore(s => s.strictTime)
+  const toggleTime           = useTrackerStore(s => s.toggleTime)
+  const toggleStrictTime     = useTrackerStore(s => s.toggleStrictTime)
 
   const [saving, setSaving] = useState(false)
   const [saved, setSaved]   = useState(false)
@@ -79,7 +87,7 @@ export function FilterBar({
     setTimeout(() => setSaved(false), 2000)
   }
 
-  const showLevel = category && category !== 'Tous' && levelValue !== null && setLevelValue !== null
+  const showLevel = !readOnly && category && category !== 'Tous' && levelValue !== null && setLevelValue !== null
 
   return (
     <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4 shadow-sm">
@@ -123,7 +131,7 @@ export function FilterBar({
         <div className="flex items-center gap-2">
           <Switch id="hide-caught" checked={hideCaught} onCheckedChange={setHideCaught} />
           <Label htmlFor="hide-caught" className="cursor-pointer whitespace-nowrap">
-            Cacher attrapés
+            {hideCaughtLabel}
           </Label>
         </div>
       </div>
@@ -142,6 +150,17 @@ export function FilterBar({
             {w}
           </Button>
         ))}
+        {selectedWeather.length > 0 && (
+          <Button
+            size="sm"
+            variant={strictWeather ? 'default' : 'outline'}
+            onClick={toggleStrictWeather}
+            type="button"
+            className={strictWeather ? 'bg-amber-500 hover:bg-amber-600 border-amber-500 text-white' : 'text-muted-foreground'}
+          >
+            Strict
+          </Button>
+        )}
       </div>
 
       {/* Créneaux */}
@@ -158,6 +177,17 @@ export function FilterBar({
             {t}
           </Button>
         ))}
+        {selectedTime.length > 0 && (
+          <Button
+            size="sm"
+            variant={strictTime ? 'default' : 'outline'}
+            onClick={toggleStrictTime}
+            type="button"
+            className={strictTime ? 'bg-amber-500 hover:bg-amber-600 border-amber-500 text-white' : 'text-muted-foreground'}
+          >
+            Strict
+          </Button>
+        )}
       </div>
 
       {/* Filtres spécifiques à la sous-route */}

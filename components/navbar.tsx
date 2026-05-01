@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import { Heart, LogOut, Menu, User as UserIcon, X } from 'lucide-react'
+import { Heart, LogOut, Menu, Users, User as UserIcon, X } from 'lucide-react'
 import { useAuth } from '@/components/auth-provider'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { Button } from '@/components/ui/button'
@@ -19,6 +19,7 @@ import { cn } from '@/lib/utils'
 const NAV_LINKS = [
   { href: '/tracker', label: 'Tracker' },
   { href: '/cuisine', label: 'Cuisine' },
+  { href: '/chat',    label: 'Chat 🐱' },
 ]
 
 export function Navbar() {
@@ -54,6 +55,14 @@ export function Navbar() {
 
         {/* Actions desktop */}
         <div className="hidden items-center gap-2 md:flex">
+          <Link
+            href="/friends"
+            className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-accent/20 hover:text-foreground"
+            aria-label="Amis"
+            title="Amis"
+          >
+            <Users className="h-5 w-5" />
+          </Link>
           <ThemeToggle />
           {user ? (
             <UserMenu email={user.email ?? ''} onSignOut={signOut} />
@@ -91,6 +100,13 @@ export function Navbar() {
               {link.label}
             </Link>
           ))}
+          <Link
+            href="/friends"
+            onClick={() => setMobileOpen(false)}
+            className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent/20 hover:text-foreground"
+          >
+            Amis
+          </Link>
 
           <div className="mt-2 flex items-center justify-between border-t border-border/60 pt-4">
             <ThemeToggle />

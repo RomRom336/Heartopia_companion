@@ -22,5 +22,5 @@ export default async function TrackerPage() {
     ...((birdRes.data ?? []) as DbBird[]).map(birdToTrackerItem),
   ]
 
-  return <TrackerView items={items} category="Tous" title="Tracker" />
+  return <TrackerView items={items} category="Tous" title="Mon tracker" />
 }
