@@ -69,8 +69,10 @@ export default function RegisterPage() {
 
     // Session immédiate (pas de confirmation email)
     if (data.session && data.user) {
-      await supabase.from('profiles')
-        .upsert({ id: data.user.id, username }, { onConflict: 'id' })
+      await Promise.all([
+        supabase.from('profiles').upsert({ id: data.user.id, username }, { onConflict: 'id' }),
+        supabase.auth.updateUser({ data: { full_name: username } }),
+      ])
       setLoading(false)
       router.push('/')
       router.refresh()

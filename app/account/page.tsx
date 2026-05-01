@@ -155,10 +155,12 @@ export default function AccountPage() {
     const trimmed = username.trim()
     if (!USERNAME_RE.test(trimmed)) { setUserError('3–20 caractères, lettres, chiffres, _ ou -.'); return }
     setUserSaving(true); setUserError(null)
-    const { error } = await createClient().from('profiles')
+    const supabase = createClient()
+    const { error } = await supabase.from('profiles')
       .upsert({ id: user.id, username: trimmed }, { onConflict: 'id' })
+    if (error) { setUserSaving(false); setUserError(error.code === '23505' ? 'Ce pseudo est déjà pris.' : error.message); return }
+    await supabase.auth.updateUser({ data: { full_name: trimmed } })
     setUserSaving(false)
-    if (error) { setUserError(error.code === '23505' ? 'Ce pseudo est déjà pris.' : error.message); return }
     setInitialUser(trimmed); setUserSaved(true)
     setTimeout(() => setUserSaved(false), 2000)
   }

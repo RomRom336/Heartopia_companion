@@ -11,20 +11,14 @@ export async function GET(request: Request) {
     const { data, error } = await supabase.auth.exchangeCodeForSession(code)
 
     if (!error && data.user) {
-      // Sauvegarder le username depuis les métadonnées si pas encore en base
       const username = data.user.user_metadata?.username as string | undefined
       if (username) {
-        const { data: existing } = await supabase
+        // Upsert inconditionnel : le trigger a créé la ligne avec username=null
+        await supabase
           .from('profiles')
-          .select('username')
-          .eq('id', data.user.id)
-          .maybeSingle()
-
-        if (!existing?.username) {
-          await supabase
-            .from('profiles')
-            .upsert({ id: data.user.id, username }, { onConflict: 'id' })
-        }
+          .upsert({ id: data.user.id, username }, { onConflict: 'id' })
+        // Sync avec le Display name Supabase (visible dans le dashboard)
+        await supabase.auth.updateUser({ data: { full_name: username } })
       }
 
       return NextResponse.redirect(`${origin}${next}`)
