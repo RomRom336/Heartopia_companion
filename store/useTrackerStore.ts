@@ -26,6 +26,10 @@ type TrackerState = {
   pendingHuntFriend: { id: string; username: string } | null
   setPendingHuntFriend: (f: { id: string; username: string } | null) => void
 
+  // Ami actif en mode comparaison (persisté entre onglets)
+  activeHuntFriend: { id: string; username: string; stars: Record<string, number> } | null
+  setActiveHuntFriend: (f: { id: string; username: string; stars: Record<string, number> } | null) => void
+
   // Actions filtres globaux
   setSearchQuery: (q: string) => void
   setHideCaught: (v: boolean) => void
@@ -67,6 +71,8 @@ export const useTrackerStore = create<TrackerState>(set => ({
   bestStars: {},
   pendingHuntFriend: null,
   setPendingHuntFriend: f => set({ pendingHuntFriend: f }),
+  activeHuntFriend: null,
+  setActiveHuntFriend: f => set({ activeHuntFriend: f }),
 
   setSearchQuery: q => set({ searchQuery: q }),
   setHideCaught: v => set({ hideCaught: v }),
@@ -111,5 +117,5 @@ export const useTrackerStore = create<TrackerState>(set => ({
       return { bestStars: rest }
     }),
 
-  reset: () => set({ ...initialFilters, bestStars: {} }),
+  reset: () => set({ ...initialFilters, bestStars: {}, activeHuntFriend: null }),
 }))

@@ -15,9 +15,8 @@ import { useTrackerStore, type TrackerCategory } from '@/store/useTrackerStore'
 import { createClient } from '@/utils/supabase/client'
 import { cn } from '@/lib/utils'
 
-type HuntColor  = 'red' | 'orange' | 'green'
-type HuntFriend = { id: string; username: string; stars: Record<string, number> }
-type ViewAs     = {
+type HuntColor = 'red' | 'orange' | 'green'
+type ViewAs    = {
   userId: string
   username: string
   bestStars: Record<string, number>
@@ -74,6 +73,8 @@ export function TrackerView({
   const clearStar              = useTrackerStore(s => s.clearStar)
   const pendingHuntFriend      = useTrackerStore(s => s.pendingHuntFriend)
   const setPendingHuntFriend   = useTrackerStore(s => s.setPendingHuntFriend)
+  const activeHuntFriend       = useTrackerStore(s => s.activeHuntFriend)
+  const setActiveHuntFriend    = useTrackerStore(s => s.setActiveHuntFriend)
 
   // En mode viewAs on affiche les étoiles de l'ami, sinon les nôtres
   const bestStars = isViewMode ? viewAs.bestStars : storeBestStars
@@ -150,7 +151,9 @@ export function TrackerView({
   const remaining = (item: TrackerItem) => 5 - (bestStars[item.id] ?? 0)
 
   // ── Mode chasse ensemble ──────────────────────────────────────
-  const [huntFriend,      setHuntFriend]      = useState<HuntFriend | null>(null)
+  // huntFriend est dans le store pour survivre aux navigations entre onglets
+  const huntFriend = activeHuntFriend
+  const setHuntFriend = setActiveHuntFriend
   const [huntColorFilter, setHuntColorFilter] = useState<HuntColor[]>([])
   const [huntPanelOpen,   setHuntPanelOpen]   = useState(false)
   const [friendsList,     setFriendsList]      = useState<{ id: string; username: string }[]>([])
