@@ -44,13 +44,14 @@ begin
   values (
     new.id,
     coalesce(
-      new.raw_user_meta_data ->> 'display_name',
-      split_part(new.email, '@', 1)
+      new.raw_user_meta_data ->> 'username',      -- formulaire d'inscription
+      new.raw_user_meta_data ->> 'display_name',  -- providers OAuth (Google…)
+      split_part(new.email, '@', 1)               -- fallback : préfixe email
     )
   );
   return new;
 exception
-  -- Si le username existe déjà (collision rare), on tombe sur un fallback unique
+  -- Collision de pseudo rare (race condition) → fallback UUID
   when unique_violation then
     insert into public.profiles (id, username)
     values (new.id, 'user_' || substr(new.id::text, 1, 8));

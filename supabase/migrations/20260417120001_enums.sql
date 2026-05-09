@@ -12,10 +12,10 @@ create type public.weather_type as enum (
 );
 
 -- Créneaux horaires du jeu
---   Nuit   : 01h00 - 07h00
---   Matin  : 07h00 - 13h00
---   Aprem  : 13h00 - 19h00
---   Soirée : 19h00 - 01h00
+--   Nuit   :  1h – 7h
+--   Matin  :  7h – 13h
+--   Aprem  : 13h – 19h
+--   Soirée : 19h – 1h
 create type public.time_period as enum (
   'Nuit',
   'Matin',

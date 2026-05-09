@@ -5,4 +5,4 @@
 -- clients échouaient silencieusement.
 -- ============================================================
 
-grant select, insert, update on public.profiles to authenticated;
+grant select, insert, update, delete on public.profiles to authenticated;

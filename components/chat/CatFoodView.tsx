@@ -178,6 +178,25 @@ export function CatFoodView({
   const wrongCount   = items.filter(i => catTests[i.id] === 'wrong').length
   const correctFound = items.find(i => catTests[i.id] === 'correct')
 
+  // ── Pagination progressive (infinite scroll) ──────────────────
+  const PAGE_SIZE = 24
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
+  const sentinelRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => { setVisibleCount(PAGE_SIZE) }, [filteredItems])
+
+  useEffect(() => {
+    if (sortByLocation) return
+    const el = sentinelRef.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setVisibleCount(c => c + PAGE_SIZE) },
+      { rootMargin: '400px' },
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [sortByLocation, filteredItems.length])
+
   return (
     <main className="container py-8">
       <header className="mb-6 flex flex-col gap-2">
@@ -311,15 +330,23 @@ export function CatFoodView({
           ))}
         </div>
       ) : (
-        <section className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {sortedItems.map(item => (
-            <FishTestCard
-              key={item.id}
-              item={item}
-              status={catTests[item.id]}
-              onSet={s => handleSet(item.id, s)}
-            />
-          ))}
+        <section className="mt-6">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {sortedItems.slice(0, visibleCount).map(item => (
+              <FishTestCard
+                key={item.id}
+                item={item}
+                status={catTests[item.id]}
+                onSet={s => handleSet(item.id, s)}
+              />
+            ))}
+          </div>
+          <div ref={sentinelRef} className="h-2" />
+          {visibleCount < sortedItems.length && (
+            <div className="flex justify-center py-6">
+              <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+            </div>
+          )}
         </section>
       )}
     </main>

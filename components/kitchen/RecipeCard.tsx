@@ -5,6 +5,7 @@ import { Coins, TrendingUp, TrendingDown } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import type { FoodProfitabilityRow } from '@/types/database.types'
+import type { TrackedIngredient } from '@/app/cuisine/page'
 
 const STAR_KEYS = [
   'sell_price_1_star',
@@ -25,9 +26,13 @@ const PROFIT_KEYS = [
 export function RecipeCard({
   food,
   maxServings,
+  tracked,
+  onCook,
 }: {
   food: FoodProfitabilityRow
   maxServings?: number | null
+  tracked?: TrackedIngredient[]
+  onCook?: () => void
 }) {
   const [selectedStar, setSelectedStar] = useState<1 | 2 | 3 | 4 | 5>(1)
 
@@ -72,6 +77,23 @@ export function RecipeCard({
         <span className="font-medium text-foreground">Recette : </span>
         {food.recipe_text}
       </p>
+
+      {/* Ingrédients en mode quantité */}
+      {tracked && tracked.length > 0 && (
+        <div className="flex flex-wrap gap-1.5">
+          {tracked.map((ing, i) => (
+            <span
+              key={i}
+              className="inline-flex items-center gap-1 rounded-full bg-blue-500/10 border border-blue-500/25 px-2.5 py-0.5 text-xs font-medium text-blue-700 dark:text-blue-300"
+            >
+              {ing.name}
+              <span className="font-semibold tabular-nums text-blue-600 dark:text-blue-400">
+                ({ing.available})
+              </span>
+            </span>
+          ))}
+        </div>
+      )}
 
       {/* Sélecteur d'étoile + tableau des profits */}
       <div className="rounded-md bg-muted/60 p-2">
@@ -133,7 +155,7 @@ export function RecipeCard({
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-1.5">
+      <div className="flex flex-wrap items-center gap-1.5">
         <Badge variant="outline" className="gap-1">
           <Coins className="h-3 w-3" />
           {food.total_cost} G coût
@@ -148,6 +170,15 @@ export function RecipeCard({
             <TrendingUp className="h-3 w-3 mr-1" />
             Total : +{(food.net_profit_1_star ?? 0) * maxServings} G
           </Badge>
+        )}
+        {onCook && (
+          <button
+            type="button"
+            onClick={onCook}
+            className="ml-auto rounded-full bg-emerald-500 px-4 py-1.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-600 active:bg-emerald-700"
+          >
+            J&apos;ai cuisiné !
+          </button>
         )}
       </div>
     </article>

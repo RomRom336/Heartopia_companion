@@ -8,7 +8,10 @@ export type TimePeriod  = 'Nuit' | 'Matin' | 'Aprem' | 'Soirée'
 export type ItemType    = 'Poisson' | 'Insecte' | 'Oiseau'
 export type FishLocation = 'Mer' | 'Lac' | 'Rivière'
 export type ShadowSize  = 'Petit' | 'Moyen' | 'Grand' | 'Doré' | 'Bleu' | 'Or'
-export type IngredientSource = 'Crop' | 'Massimo_Store' | 'Doris_Store'
+export type IngredientSource =
+  | 'Crop' | 'Massimo_Store' | 'Doris_Store'
+  | 'Champignon' | 'Fruit' | 'Aquatique' | 'Autre'
+  | 'SubFood'
 
 // ── Tables de faune (DB rows) ────────────────────────────────
 export interface DbFish {

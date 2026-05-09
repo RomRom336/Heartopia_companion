@@ -59,7 +59,15 @@ values
   -- Fleurs et plantes (ingrédients de recettes)
   (md5('foraged_WhiteDaisy')::uuid,    'White Daisy',        'Pâquerette blanche',  'Autre',       0),
   (md5('foraged_RedRose')::uuid,       'Red Rose',           'Rose rouge',          'Autre',       0),
-  (md5('foraged_Weed')::uuid,          'Weed',               'Mauvaise herbe',      'Autre',       0);
+  (md5('foraged_Weed')::uuid,          'Weed',               'Mauvaise herbe',      'Autre',       0),
+  -- Poissons et crustacés (trackables en cuisine)
+  (md5('foraged_Fish')::uuid,          'Fish',               'Poisson',             'Aquatique',   0),
+  (md5('foraged_Seafood')::uuid,       'Seafood',            'Fruits de mer',       'Aquatique',   0),
+  (md5('foraged_Crayfish')::uuid,      'Crayfish',           'Écrevisse',           'Aquatique',   0),
+  (md5('foraged_BlueCrayfish')::uuid,  'Blue Noble Crayfish','Écrevisse noble bleue','Aquatique',  0),
+  (md5('foraged_Shrimp')::uuid,        'Shrimp',             'Crevette',            'Aquatique',   0),
+  (md5('foraged_KingCrab')::uuid,      'King Crab',          'Crabe royal',         'Aquatique',   0),
+  (md5('foraged_GoldenKingCrab')::uuid,'Golden King Crab',   'Crabe royal doré',    'Aquatique',   0);
 
 
 -- ============================================================
@@ -162,27 +170,29 @@ values
 -- ============================================================
 -- 5. POISSONS (fish)
 --
--- Mapping time_period[] depuis les chaînes JSON :
---   "Toute la journée"  → [Nuit,Matin,Aprem,Soirée]
---   "Attracteur Sirène" → []  + special_condition
---   "07:00 - 19:00"     → [Matin,Aprem]
---   "19:00 - 07:00"     → [Soirée,Nuit]
---   "13:00 - 01:00"     → [Aprem,Soirée]
---   "01:00 - 13:00"     → [Nuit,Matin]
---   "12:00 - 06:00"     → [Matin,Aprem,Soirée,Nuit]
---   "18:00 - 12:00"     → [Aprem,Soirée,Nuit,Matin]
---   "13:00 - 07:00"     → [Aprem,Soirée,Nuit]
---   "19:00 - 01:00"     → [Soirée]
---   "12:00 - 00:00"     → [Matin,Aprem,Soirée]
---   "07:00 - 01:00"     → [Matin,Aprem,Soirée]
---   "06:00 - 18:00"     → [Nuit,Matin,Aprem]
---   "18:00 - 06:00"     → [Aprem,Soirée,Nuit]
---   "19:00 - 13:00"     → [Soirée,Nuit,Matin]
---   "01:00 - 19:00"     → [Nuit,Matin,Aprem]
---   "19:00 - 02:00"     → [Soirée,Nuit]
---   "06:00 - 12:00"     → [Nuit,Matin]
---   "06:00 - 00:00"     → [Nuit,Matin,Aprem,Soirée]
---   "00:00 - 12:00"     → [Soirée,Nuit,Matin]
+-- Créneaux du jeu : Nuit 1h–7h · Matin 7h–13h · Aprem 13h–19h · Soirée 19h–1h
+--
+-- Mapping time_period[] depuis les chaînes JSON du jeu :
+--   "Toute la journée"  → [Nuit,Matin,Aprem,Soirée]    (1h–1h : tout)
+--   "Attracteur Sirène" → []  + special_condition        (aucun créneau natif)
+--   "07:00 - 19:00"     → [Matin,Aprem]                 (7h–13h + 13h–19h)
+--   "19:00 - 07:00"     → [Soirée,Nuit]                 (19h–1h + 1h–7h)
+--   "13:00 - 01:00"     → [Aprem,Soirée]                (13h–19h + 19h–1h)
+--   "01:00 - 13:00"     → [Nuit,Matin]                  (1h–7h + 7h–13h)
+--   "12:00 - 06:00"     → [Matin,Aprem,Soirée,Nuit]     (12h → 06h : tout sauf début Matin)
+--   "18:00 - 12:00"     → [Aprem,Soirée,Nuit,Matin]     (18h → 12h : tout sauf début Aprem)
+--   "13:00 - 07:00"     → [Aprem,Soirée,Nuit]           (13h–19h + 19h–1h + 1h–7h)
+--   "19:00 - 01:00"     → [Soirée]                      (19h–1h exactement)
+--   "12:00 - 00:00"     → [Matin,Aprem,Soirée]          (12h–13h + 13h–19h + 19h–1h)
+--   "07:00 - 01:00"     → [Matin,Aprem,Soirée]          (7h–13h + 13h–19h + 19h–1h)
+--   "06:00 - 18:00"     → [Nuit,Matin,Aprem]            (6h–7h + 7h–13h + 13h–18h)
+--   "18:00 - 06:00"     → [Aprem,Soirée,Nuit]           (13h–19h + 19h–1h + 1h–7h)
+--   "19:00 - 13:00"     → [Soirée,Nuit,Matin]           (19h–1h + 1h–7h + 7h–13h)
+--   "01:00 - 19:00"     → [Nuit,Matin,Aprem]            (1h–7h + 7h–13h + 13h–19h)
+--   "19:00 - 02:00"     → [Soirée,Nuit]                 (19h–1h + 1h–2h)
+--   "06:00 - 12:00"     → [Nuit,Matin]                  (6h–7h + 7h–12h)
+--   "06:00 - 00:00"     → [Nuit,Matin,Aprem,Soirée]     (6h–7h + 7h–13h + 13h–19h + 19h–0h)
+--   "00:00 - 12:00"     → [Soirée,Nuit,Matin]           (0h–1h + 1h–7h + 7h–12h)
 --
 -- Mapping shadow_size[] :
 --   Petite→Petit  Moyenne→Moyen  Grande→Grand
@@ -1849,8 +1859,6 @@ insert into public.food (
   sell_price_4_star, sell_price_5_star,
   total_cost, recipe_text
 ) values
-  (md5('food_Bizarre food')::uuid,       'Bizarre food',      'Nourriture étrange',1,     30,null,null,null,null,     0,'Rater n''importe quel plat'),
-  (md5('food_Bizzare drink')::uuid,      'Bizzare drink',     'Boisson étrange',  1,     30,null,null,null,null,     0,'Rater n''importe quelle boisson'),
   (md5('food_House Salad')::uuid,        'House Salad',       'Salade de campagne',    1,     90, 135, 180, 360, 720,    20,'2 Tout type de légumes'),
   (md5('food_Mixed Jam')::uuid,          'Mixed Jam',         'Confiture assortie',  1,    160, 240, 320, 640,1280,     0,'4 Tout type de fruits'),
   (md5('food_Blueberry Jam')::uuid,      'Blueberry Jam',     'Confiture de myrtille',1,170, 255, 340, 680,1360,   0,'4 Myrtilles'),
@@ -1955,10 +1963,6 @@ insert into public.recipe_ingredient
   (food_id, ingredient_id, foraged_id, sub_food_id,
    quantity, ingredient_label, ingredient_type)
 values
-
--- ── Bizarre food — générique ─────────────────────────────────
-  (md5('food_Bizarre food')::uuid,  null,null,null, 1,'Rater n''importe quel plat','generic'),
-  (md5('food_Bizzare drink')::uuid, null,null,null, 1,'Rater n''importe quelle boisson','generic'),
 
 -- ── House Salad ──────────────────────────────────────────────
   (md5('food_House Salad')::uuid,   null,null,null, 2,'Toute type de légumes','generic'),
@@ -2173,20 +2177,20 @@ values
   (md5('food_Baked Eggplant With Meat')::uuid,null,null,md5('food_Tomato Sauce')::uuid, 1,'Sauce tomate','food'),
 
 -- ── Fish N Chips ─────────────────────────────────────────────
-  (md5('food_Fish N Chips')::uuid,  null,null,null, 2,'Poissons','generic'),
+  (md5('food_Fish N Chips')::uuid,  null,md5('foraged_Fish')::uuid,null, 2,'Poissons','foraged'),
   (md5('food_Fish N Chips')::uuid,  md5('ingr_Potato')::uuid,null,null, 2,'Pommes de terre','ingredient'),
 
 -- ── Deluxe Seafood Platter ───────────────────────────────────
-  (md5('food_Deluxe Seafood Platter')::uuid,null,null,null, 2,'Ecrevisses','generic'),
-  (md5('food_Deluxe Seafood Platter')::uuid,null,null,null, 2,'Poissons','generic'),
+  (md5('food_Deluxe Seafood Platter')::uuid,null,md5('foraged_Crayfish')::uuid,null, 2,'Ecrevisses','foraged'),
+  (md5('food_Deluxe Seafood Platter')::uuid,null,md5('foraged_Fish')::uuid,null, 2,'Poissons','foraged'),
 
 -- ── Seafood Risotto ──────────────────────────────────────────
-  (md5('food_Seafood Risotto')::uuid,null,null,null, 2,'Fruits de mer','generic'),
+  (md5('food_Seafood Risotto')::uuid,null,md5('foraged_Seafood')::uuid,null, 2,'Fruits de mer','foraged'),
   (md5('food_Seafood Risotto')::uuid,md5('ingr_Wheat')::uuid,null,null, 1,'Blé','ingredient'),
   (md5('food_Seafood Risotto')::uuid,md5('ingr_Tomato')::uuid,null,null, 1,'Tomate','ingredient'),
 
 -- ── Smoked Fish Bagel ────────────────────────────────────────
-  (md5('food_Smoked Fish Bagel')::uuid,null,null,null, 1,'Poissons','generic'),
+  (md5('food_Smoked Fish Bagel')::uuid,null,md5('foraged_Fish')::uuid,null, 1,'Poissons','foraged'),
   (md5('food_Smoked Fish Bagel')::uuid,md5('ingr_Cheese')::uuid,null,null, 1,'Fromage','ingredient'),
   (md5('food_Smoked Fish Bagel')::uuid,md5('ingr_Wheat')::uuid,null,null, 1,'Blé','ingredient'),
   (md5('food_Smoked Fish Bagel')::uuid,null,null,null, 1,'Légumes','generic'),
@@ -2195,22 +2199,22 @@ values
   (md5('food_Seafood Pizza')::uuid, md5('ingr_Cheese')::uuid,null,null, 1,'Fromage','ingredient'),
   (md5('food_Seafood Pizza')::uuid, null,null,md5('food_Tomato Sauce')::uuid, 1,'Sauce tomate','food'),
   (md5('food_Seafood Pizza')::uuid, md5('ingr_Wheat')::uuid,null,null, 1,'Blé','ingredient'),
-  (md5('food_Seafood Pizza')::uuid, null,null,null, 1,'Poisson','generic'),
+  (md5('food_Seafood Pizza')::uuid, null,md5('foraged_Fish')::uuid,null, 1,'Poisson','foraged'),
 
 -- ── Steamed King Crab ────────────────────────────────────────
-  (md5('food_Steamed King Crab')::uuid,null,null,null, 3,'Crabe','generic'),
+  (md5('food_Steamed King Crab')::uuid,null,md5('foraged_KingCrab')::uuid,null, 3,'Crabe','foraged'),
   (md5('food_Steamed King Crab')::uuid,md5('ingr_Butter')::uuid,null,null, 1,'Beurre','ingredient'),
 
 -- ── Steamed Golden King Crab ─────────────────────────────────
-  (md5('food_Steamed Golden King Crab')::uuid,null,null,null, 3,'Crabe royal doré','generic'),
+  (md5('food_Steamed Golden King Crab')::uuid,null,md5('foraged_GoldenKingCrab')::uuid,null, 3,'Crabe royal doré','foraged'),
   (md5('food_Steamed Golden King Crab')::uuid,md5('ingr_Butter')::uuid,null,null, 1,'Beurre','ingredient'),
 
 -- ── Cheese Shrimp Stuffed Crab ───────────────────────────────
-  (md5('food_Cheese Shrimp Stuffed Crab')::uuid,null,null,null, 2,'Crabes royaux','generic'),
-  (md5('food_Cheese Shrimp Stuffed Crab')::uuid,null,null,null, 2,'Crevettes','generic'),
+  (md5('food_Cheese Shrimp Stuffed Crab')::uuid,null,md5('foraged_KingCrab')::uuid,null, 2,'Crabes royaux','foraged'),
+  (md5('food_Cheese Shrimp Stuffed Crab')::uuid,null,md5('foraged_Shrimp')::uuid,null, 2,'Crevettes','foraged'),
 
 -- ── Shrimp Avocado Cup ───────────────────────────────────────
-  (md5('food_Shrimp Avocado Cup')::uuid,null,null,null, 2,'Crevettes','generic'),
+  (md5('food_Shrimp Avocado Cup')::uuid,null,md5('foraged_Shrimp')::uuid,null, 2,'Crevettes','foraged'),
   (md5('food_Shrimp Avocado Cup')::uuid,md5('ingr_Avocado')::uuid,null,null, 2,'Avocats','ingredient'),
 
 -- ── Afternoon Tea ────────────────────────────────────────────
@@ -2230,11 +2234,11 @@ values
   (md5('food_Candlelight Dinner')::uuid,null,null,md5('food_Tiramisu')::uuid, 1,'Tiramisu','food'),
 
 -- ── Crayfish Sashimi ─────────────────────────────────────────
-  (md5('food_Crayfish Sashimi')::uuid,null,null,null, 3,'Ecrevisse','generic'),
+  (md5('food_Crayfish Sashimi')::uuid,null,md5('foraged_Crayfish')::uuid,null, 3,'Ecrevisse','foraged'),
   (md5('food_Crayfish Sashimi')::uuid,md5('ingr_Lettuce')::uuid,null,null, 1,'Salade','ingredient'),
 
 -- ── Blue European Crayfish Sashimi ───────────────────────────
-  (md5('food_Blue European Crayfish Sashimi')::uuid,null,null,null, 3,'Ecrevisse noble bleu','generic'),
+  (md5('food_Blue European Crayfish Sashimi')::uuid,null,md5('foraged_BlueCrayfish')::uuid,null, 3,'Ecrevisse noble bleu','foraged'),
   (md5('food_Blue European Crayfish Sashimi')::uuid,md5('ingr_Lettuce')::uuid,null,null, 1,'Salade','ingredient'),
 
 -- ── Exquisite Afternoon Tea ──────────────────────────────────

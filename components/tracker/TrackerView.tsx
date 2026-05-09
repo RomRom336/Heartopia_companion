@@ -279,6 +279,25 @@ export function TrackerView({
 
   const [sortByLocation, setSortByLocation] = useState(false)
 
+  // ── Pagination progressive (infinite scroll) ──────────────────
+  const PAGE_SIZE = 24
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
+  const sentinelRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => { setVisibleCount(PAGE_SIZE) }, [filteredItems])
+
+  useEffect(() => {
+    if (sortByLocation) return
+    const el = sentinelRef.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setVisibleCount(c => c + PAGE_SIZE) },
+      { rootMargin: '400px' },
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [sortByLocation, filteredItems.length])
+
   // ── Menu ⋯ (marquage en masse) ────────────────────────────────
   const [menuOpen,    setMenuOpen]    = useState(false)
   const [threshold,   setThreshold]   = useState(5)
@@ -645,7 +664,15 @@ export function TrackerView({
           ))}
         </div>
       ) : (
-        <section className="mt-6">{itemGrid(filteredItems)}</section>
+        <section className="mt-6">
+          {itemGrid(filteredItems.slice(0, visibleCount))}
+          <div ref={sentinelRef} className="h-2" />
+          {visibleCount < filteredItems.length && (
+            <div className="flex justify-center py-6">
+              <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+            </div>
+          )}
+        </section>
       )}
     </main>
   )
