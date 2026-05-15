@@ -57,6 +57,8 @@ export interface DbBird {
   weather: WeatherType[]
   time: TimePeriod[]
   exact_location: string | null
+  perfect_photo_distance: string | null
+  stretch_time: string | null
   sell_price_1_star: number
   sell_price_2_star: number
   sell_price_3_star: number
@@ -84,6 +86,9 @@ export interface TrackerItem {
   location_type?: FishLocation
   shadow_size?: ShadowSize[]
   special_condition?: string | null
+  // Oiseau uniquement
+  perfect_photo_distance?: string | null
+  stretch_time?: string | null
 }
 
 // ── Adapteurs DB → TrackerItem ────────────────────────────────
@@ -141,6 +146,8 @@ export function birdToTrackerItem(b: DbBird): TrackerItem {
     sell_price_3_star: b.sell_price_3_star,
     sell_price_4_star: b.sell_price_4_star,
     sell_price_5_star: b.sell_price_5_star,
+    perfect_photo_distance: b.perfect_photo_distance,
+    stretch_time: b.stretch_time,
   }
 }
 

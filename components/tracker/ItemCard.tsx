@@ -1,9 +1,22 @@
 'use client'
 
+import { useState } from 'react'
 import { AlertCircle, Coins, Star } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import type { TrackerItem, WeatherType, TimePeriod } from '@/types/database.types'
+
+const IMG_FOLDER: Record<string, string> = {
+  Poisson: 'fish',
+  Insecte: 'insects',
+  Oiseau:  'birds',
+}
+
+const IMG_BG: Record<string, string> = {
+  Poisson: 'from-blue-400/20 via-blue-400/10 to-transparent',
+  Insecte: 'from-green-400/20 via-green-400/10 to-transparent',
+  Oiseau:  'from-amber-400/20 via-amber-400/10 to-transparent',
+}
 
 const WEATHER_EMOJI: Record<WeatherType, string> = {
   Soleil: '☀️', Pluie: '🌧️', Neige: '❄️', 'Arc-en-ciel': '🌈',
@@ -33,6 +46,7 @@ export function ItemCard({
     friendUsername?: string
   }
 }) {
+  const [imgError, setImgError] = useState(false)
   const caught  = bestStar != null
   const isAllDay = ALL_TIMES.every(t => item.time.includes(t))
 
@@ -48,11 +62,35 @@ export function ItemCard({
     :                               'bg-destructive/5'
     : ''
 
+  const imgFolder = IMG_FOLDER[item.type]
+  const imgSrc    = `/${imgFolder}/${encodeURIComponent(item.name_en)}.webp`
+  const imgBg     = IMG_BG[item.type]
+
   return (
     <article className={cn(
-      'flex flex-col overflow-hidden rounded-xl border shadow-sm transition-all hover:shadow-md',
+      'group flex flex-col overflow-hidden rounded-xl border shadow-sm transition-all hover:shadow-md',
       'bg-card', bgClass, borderClass,
     )}>
+
+      {/* Image */}
+      <div className={cn(
+        'relative flex h-36 items-end justify-center overflow-hidden bg-gradient-to-b',
+        imgBg,
+      )}>
+        {!imgError && (
+          <img
+            src={imgSrc}
+            alt={item.name}
+            onError={() => setImgError(true)}
+            className={cn(
+              'h-32 w-auto object-contain drop-shadow-[0_4px_10px_rgba(0,0,0,0.15)]',
+              'transition-transform duration-300 group-hover:scale-105',
+              caught ? 'opacity-100' : 'opacity-60 grayscale',
+            )}
+          />
+        )}
+      </div>
+
       <div className="flex flex-1 flex-col gap-3 p-4">
 
         {/* Nom + niveau + type */}
