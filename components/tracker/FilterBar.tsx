@@ -83,22 +83,22 @@ export function FilterBar({
     : null
 
   const handleSaveLevel = async () => {
-    if (!user || !category || category === 'Tous') return
-    const cfg = LEVEL_CONFIG[category]
+    if (!user || !category) return
     setSaving(true)
+    const payload = category === 'Tous'
+      ? { id: user.id, fishing_passion: maxFishLevel, bug_passion: maxInsectLevel, bird_passion: maxBirdLevel }
+      : { id: user.id, [LEVEL_CONFIG[category].field]: levelValue }
     const { error } = await createClient()
       .from('profiles')
-      .upsert(
-        { id: user.id, [cfg.field]: levelValue },
-        { onConflict: 'id' },
-      )
+      .upsert(payload, { onConflict: 'id' })
     if (error) { console.error('[FilterBar] UPSERT error:', error); setSaving(false); return }
     setSaving(false)
     setSaved(true)
     setTimeout(() => setSaved(false), 2000)
   }
 
-  const showLevel = !readOnly && category && category !== 'Tous' && levelValue !== null && setLevelValue !== null
+  const showLevel    = !readOnly && category && category !== 'Tous' && levelValue !== null && setLevelValue !== null
+  const showAllLevels = !readOnly && category === 'Tous'
 
   return (
     <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4 shadow-sm">
@@ -129,6 +129,33 @@ export function FilterBar({
               onChange={e => setLevelValue!(Number(e.target.value) || 1)}
               className="w-16"
             />
+            {user && (
+              <Button size="sm" variant="outline" onClick={handleSaveLevel} disabled={saving}>
+                {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  : saved ? <Check className="h-3.5 w-3.5" /> : null}
+                <span>{saved ? 'Sauvegardé' : 'Sauvegarder'}</span>
+              </Button>
+            )}
+          </div>
+        )}
+
+        {showAllLevels && (
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-1.5">
+              <Label className="whitespace-nowrap text-xs text-muted-foreground">🎣</Label>
+              <Input type="number" min={1} max={100} value={maxFishLevel}
+                onChange={e => setMaxFishLevel(Number(e.target.value) || 1)} className="w-16" />
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Label className="whitespace-nowrap text-xs text-muted-foreground">🦋</Label>
+              <Input type="number" min={1} max={100} value={maxInsectLevel}
+                onChange={e => setMaxInsectLevel(Number(e.target.value) || 1)} className="w-16" />
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Label className="whitespace-nowrap text-xs text-muted-foreground">🐦</Label>
+              <Input type="number" min={1} max={100} value={maxBirdLevel}
+                onChange={e => setMaxBirdLevel(Number(e.target.value) || 1)} className="w-16" />
+            </div>
             {user && (
               <Button size="sm" variant="outline" onClick={handleSaveLevel} disabled={saving}>
                 {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
