@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -24,17 +25,35 @@ export function FishTestCard({
   status: CatTestStatus | undefined
   onSet: (s: CatTestStatus | null) => void
 }) {
+  const [imgError, setImgError] = useState(false)
   const isAllDay = ALL_TIMES.every(t => item.time.includes(t))
+  const imgSrc = `/fish/${encodeURIComponent(item.name_en)}.webp`
 
   return (
     <article
       className={cn(
-        'flex flex-col overflow-hidden rounded-xl border bg-card shadow-sm transition-all',
+        'group flex flex-col overflow-hidden rounded-xl border bg-card shadow-sm transition-all',
         status === 'correct' && 'border-green-500/60 ring-1 ring-green-500/40',
         status === 'wrong'   && 'border-destructive/40 opacity-60',
         !status              && 'border-border',
       )}
     >
+      {/* Image */}
+      <div className="relative flex h-32 items-end justify-center overflow-hidden bg-gradient-to-b from-blue-400/20 via-blue-400/10 to-transparent">
+        {!imgError && (
+          <img
+            src={imgSrc}
+            alt={item.name}
+            onError={() => setImgError(true)}
+            className={cn(
+              'h-28 w-auto object-contain drop-shadow-[0_4px_10px_rgba(0,0,0,0.15)]',
+              'transition-transform duration-300 group-hover:scale-105',
+              status === 'wrong' ? 'grayscale' : '',
+            )}
+          />
+        )}
+      </div>
+
       <div className="flex flex-1 flex-col gap-2.5 p-4">
         {/* Nom + niveau */}
         <div className="flex items-start justify-between gap-2">

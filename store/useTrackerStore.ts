@@ -7,6 +7,8 @@ type TrackerState = {
   // Filtres globaux (persistent entre sous-routes)
   searchQuery: string
   hideCaught: boolean
+  hideEvents: boolean
+  showIgnored: boolean
   maxFishLevel: number
   maxInsectLevel: number
   maxBirdLevel: number
@@ -22,6 +24,9 @@ type TrackerState = {
   // Capture : item_id → meilleure étoile obtenue (1..5). Absent = jamais attrapé.
   bestStars: Record<string, number>
 
+  // Ignorés : item_id → true (event terminé, plus attrapable)
+  ignoredIds: Record<string, boolean>
+
   // Ami à activer en mode chasse dès l'arrivée sur /tracker
   pendingHuntFriend: { id: string; username: string } | null
   setPendingHuntFriend: (f: { id: string; username: string } | null) => void
@@ -33,6 +38,8 @@ type TrackerState = {
   // Actions filtres globaux
   setSearchQuery: (q: string) => void
   setHideCaught: (v: boolean) => void
+  setHideEvents: (v: boolean) => void
+  setShowIgnored: (v: boolean) => void
   setMaxFishLevel: (n: number) => void
   setMaxInsectLevel: (n: number) => void
   setMaxBirdLevel: (n: number) => void
@@ -50,12 +57,18 @@ type TrackerState = {
   setStar: (id: string, star: number) => void
   clearStar: (id: string) => void
 
+  // Actions ignorés
+  setIgnoredIds: (record: Record<string, boolean>) => void
+  setIgnored: (id: string, val: boolean) => void
+
   reset: () => void
 }
 
 const initialFilters = {
   searchQuery: '',
   hideCaught: false,
+  hideEvents: false,
+  showIgnored: false,
   maxFishLevel: 10,
   maxInsectLevel: 10,
   maxBirdLevel: 10,
@@ -69,6 +82,7 @@ const initialFilters = {
 export const useTrackerStore = create<TrackerState>(set => ({
   ...initialFilters,
   bestStars: {},
+  ignoredIds: {},
   pendingHuntFriend: null,
   setPendingHuntFriend: f => set({ pendingHuntFriend: f }),
   activeHuntFriend: null,
@@ -76,6 +90,8 @@ export const useTrackerStore = create<TrackerState>(set => ({
 
   setSearchQuery: q => set({ searchQuery: q }),
   setHideCaught: v => set({ hideCaught: v }),
+  setHideEvents: v => set({ hideEvents: v }),
+  setShowIgnored: v => set({ showIgnored: v }),
   setMaxFishLevel: n =>
     set({ maxFishLevel: Math.max(1, Math.min(100, Math.floor(n) || 1)) }),
   setMaxInsectLevel: n =>
@@ -117,5 +133,9 @@ export const useTrackerStore = create<TrackerState>(set => ({
       return { bestStars: rest }
     }),
 
-  reset: () => set({ ...initialFilters, bestStars: {}, activeHuntFriend: null }),
+  setIgnoredIds: record => set({ ignoredIds: record }),
+  setIgnored: (id, val) =>
+    set(s => ({ ignoredIds: { ...s.ignoredIds, [id]: val } })),
+
+  reset: () => set({ ...initialFilters, bestStars: {}, ignoredIds: {}, activeHuntFriend: null }),
 }))

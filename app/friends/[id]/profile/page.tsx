@@ -92,22 +92,23 @@ export default async function FriendProfilePage({ params }: Props) {
   const insectLevel = profile.bug_passion     as number | null
   const birdLevel   = profile.bird_passion    as number | null
 
-  // Collection de l'ami
+  // Collection de l'ami (sans les ignorés)
   const { data: collection } = await supabase
     .from('user_collection')
     .select('item_id, item_type')
     .eq('user_id', id)
+    .eq('ignored', false)
 
   const fishCaught   = collection?.filter(r => r.item_type === 'Poisson').length ?? 0
   const insectCaught = collection?.filter(r => r.item_type === 'Insecte').length ?? 0
   const birdCaught   = collection?.filter(r => r.item_type === 'Oiseau').length  ?? 0
   const caughtIds    = new Set(collection?.map(r => r.item_id as string) ?? [])
 
-  // Totaux et items dans le niveau de passion
+  // Totaux et items dans le niveau de passion (sans les animaux d'event)
   const [fishAll, insectAll, birdAll] = await Promise.all([
-    supabase.from('fish').select('id, passion_level'),
-    supabase.from('insect').select('id, passion_level'),
-    supabase.from('bird').select('id, passion_level'),
+    supabase.from('fish').select('id, passion_level').is('event_name', null),
+    supabase.from('insect').select('id, passion_level').is('event_name', null),
+    supabase.from('bird').select('id, passion_level').is('event_name', null),
   ])
 
   const fishTotal   = fishAll.data?.length   ?? 0

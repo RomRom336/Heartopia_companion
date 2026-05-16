@@ -50,6 +50,10 @@ export function FilterBar({
   const setSearchQuery    = useTrackerStore(s => s.setSearchQuery)
   const hideCaught        = useTrackerStore(s => s.hideCaught)
   const setHideCaught     = useTrackerStore(s => s.setHideCaught)
+  const hideEvents        = useTrackerStore(s => s.hideEvents)
+  const setHideEvents     = useTrackerStore(s => s.setHideEvents)
+  const showIgnored       = useTrackerStore(s => s.showIgnored)
+  const setShowIgnored    = useTrackerStore(s => s.setShowIgnored)
   const maxFishLevel      = useTrackerStore(s => s.maxFishLevel)
   const setMaxFishLevel   = useTrackerStore(s => s.setMaxFishLevel)
   const maxInsectLevel    = useTrackerStore(s => s.maxInsectLevel)
@@ -139,6 +143,20 @@ export function FilterBar({
           <Switch id="hide-caught" checked={hideCaught} onCheckedChange={setHideCaught} />
           <Label htmlFor="hide-caught" className="cursor-pointer whitespace-nowrap">
             {hideCaughtLabel}
+          </Label>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <Switch id="hide-events" checked={hideEvents} onCheckedChange={setHideEvents} />
+          <Label htmlFor="hide-events" className="cursor-pointer whitespace-nowrap">
+            Masquer événements
+          </Label>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <Switch id="show-ignored" checked={showIgnored} onCheckedChange={setShowIgnored} />
+          <Label htmlFor="show-ignored" className="cursor-pointer whitespace-nowrap">
+            Afficher ignorés
           </Label>
         </div>
       </div>

@@ -67,10 +67,17 @@ export function TrackerView({
   const strictTime           = useTrackerStore(s => s.strictTime)
   const specificFilterState  = useTrackerStore(s => s.specificFilters)
   const clearSpecificFilters = useTrackerStore(s => s.clearSpecificFilters)
+  const hideEvents             = useTrackerStore(s => s.hideEvents)
+  const setHideEvents          = useTrackerStore(s => s.setHideEvents)
+  const showIgnored            = useTrackerStore(s => s.showIgnored)
+  const setShowIgnored         = useTrackerStore(s => s.setShowIgnored)
   const storeBestStars         = useTrackerStore(s => s.bestStars)
   const setBestStars           = useTrackerStore(s => s.setBestStars)
   const setStar                = useTrackerStore(s => s.setStar)
   const clearStar              = useTrackerStore(s => s.clearStar)
+  const ignoredIds             = useTrackerStore(s => s.ignoredIds)
+  const setIgnoredIds          = useTrackerStore(s => s.setIgnoredIds)
+  const setIgnored             = useTrackerStore(s => s.setIgnored)
   const pendingHuntFriend      = useTrackerStore(s => s.pendingHuntFriend)
   const setPendingHuntFriend   = useTrackerStore(s => s.setPendingHuntFriend)
   const activeHuntFriend       = useTrackerStore(s => s.activeHuntFriend)
@@ -109,18 +116,23 @@ export function TrackerView({
     ;(async () => {
       const { data, error } = await supabase
         .from('user_collection')
-        .select('item_id, best_star')
+        .select('item_id, best_star, ignored')
         .eq('user_id', user.id)
       if (cancelled) return
       if (error) { console.error('Tracker — échec hydratation :', error); return }
       if (data) {
         const rec: Record<string, number> = {}
-        for (const row of data) if (row.best_star != null) rec[row.item_id as string] = row.best_star as number
+        const ign: Record<string, boolean> = {}
+        for (const row of data) {
+          if (row.best_star != null) rec[row.item_id as string] = row.best_star as number
+          if (row.ignored) ign[row.item_id as string] = true
+        }
         setBestStars(rec)
+        setIgnoredIds(ign)
       }
     })()
     return () => { cancelled = true }
-  }, [user, isViewMode, setBestStars])
+  }, [user, isViewMode, setBestStars, setIgnoredIds])
 
   // ── Click étoile (désactivé en mode viewAs) ───────────────────
   const handleStarClick = async (item: TrackerItem, star: number) => {
@@ -145,6 +157,28 @@ export function TrackerView({
       console.error('Tracker — échec synchro :', err)
       if (previous == null) clearStar(item.id)
       else setStar(item.id, previous)
+    }
+  }
+
+  const handleIgnoreClick = async (item: TrackerItem) => {
+    if (!user || isViewMode) return
+    const wasIgnored = ignoredIds[item.id]
+    setIgnored(item.id, !wasIgnored)
+    try {
+      if (wasIgnored) {
+        const { error } = await createClient().from('user_collection').delete()
+          .match({ user_id: user.id, item_type: item.type, item_id: item.id })
+        if (error) throw error
+      } else {
+        const { error } = await createClient().from('user_collection').upsert(
+          { user_id: user.id, item_type: item.type, item_id: item.id, ignored: true, best_star: null },
+          { onConflict: 'user_id,item_type,item_id' },
+        )
+        if (error) throw error
+      }
+    } catch (err) {
+      console.error('Tracker — échec ignore :', err)
+      setIgnored(item.id, wasIgnored ?? false)
     }
   }
 
@@ -225,6 +259,10 @@ export function TrackerView({
     const q = searchQuery.trim().toLowerCase()
     return items.filter(item => {
       if (hideCaught && bestStars[item.id] != null) return false
+      if (hideEvents && item.event_name != null) return false
+      const isIgnored = ignoredIds[item.id] && bestStars[item.id] == null
+      if (showIgnored) { if (!isIgnored) return false }
+      else             { if (isIgnored)  return false }
       if (q && !item.name.toLowerCase().includes(q)) return false
       const maxLevel = item.type === 'Poisson' ? maxFishLevel
         : item.type === 'Insecte' ? maxInsectLevel : maxBirdLevel
@@ -250,27 +288,41 @@ export function TrackerView({
       return true
     })
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [items, searchQuery, hideCaught, maxFishLevel, maxInsectLevel, maxBirdLevel,
+  }, [items, searchQuery, hideCaught, hideEvents, showIgnored, ignoredIds,
+      maxFishLevel, maxInsectLevel, maxBirdLevel,
       selectedWeather, strictWeather, selectedTime, strictTime, specificFilterState,
       bestStars, huntFriend, huntColorFilter, storeBestStars])
 
-  const locationGroups = useMemo(() => {
+  const regularItems = useMemo(() => filteredItems.filter(i => i.event_name == null), [filteredItems])
+  const eventItems   = useMemo(() =>
+    filteredItems
+      .filter(i => i.event_name != null)
+      .sort((a, b) =>
+        (a.event_name ?? '').localeCompare(b.event_name ?? '') ||
+        a.passion_level - b.passion_level ||
+        a.name.localeCompare(b.name),
+      ),
+  [filteredItems])
+
+  const buildLocationGroups = (its: TrackerItem[]) => {
     const map = new Map<string, TrackerItem[]>()
-    for (const item of filteredItems) {
+    for (const item of its) {
       const loc = item.exact_location || 'Lieu non précisé'
       const arr = map.get(loc) ?? []
       arr.push(item)
       map.set(loc, arr)
     }
     return Array.from(map.entries())
-      .map(([loc, its]) => ({
+      .map(([loc, group]) => ({
         loc,
-        items: [...its].sort((a, b) => remaining(b) - remaining(a)),
-        totalRemaining: its.reduce((s, i) => s + remaining(i), 0),
+        items: [...group].sort((a, b) => remaining(b) - remaining(a)),
+        totalRemaining: group.reduce((s, i) => s + remaining(i), 0),
       }))
       .sort((a, b) => b.totalRemaining - a.totalRemaining)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filteredItems, bestStars])
+  }
+
+  const locationGroups      = useMemo(() => buildLocationGroups(regularItems), [regularItems, bestStars]) // eslint-disable-line react-hooks/exhaustive-deps
+  const eventLocationGroups = useMemo(() => buildLocationGroups(eventItems),   [eventItems,   bestStars]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const caughtCount = useMemo(
     () => items.reduce((n, i) => n + (bestStars[i.id] != null ? 1 : 0), 0),
@@ -296,7 +348,7 @@ export function TrackerView({
     )
     obs.observe(el)
     return () => obs.disconnect()
-  }, [sortByLocation, filteredItems.length])
+  }, [sortByLocation, regularItems.length])
 
   // ── Menu ⋯ (marquage en masse) ────────────────────────────────
   const [menuOpen,    setMenuOpen]    = useState(false)
@@ -360,6 +412,8 @@ export function TrackerView({
             bestStar={bestStars[item.id]}
             onStarClick={star => handleStarClick(item, star)}
             readOnly={isViewMode}
+            ignored={ignoredIds[item.id] ?? false}
+            onIgnore={() => handleIgnoreClick(item)}
             huntInfo={huntFriend ? {
               color: huntColor!,
               label: huntLabel,
@@ -662,17 +716,51 @@ export function TrackerView({
               {itemGrid(its)}
             </section>
           ))}
+          {eventLocationGroups.length > 0 && (
+            <>
+              <div className="flex items-center gap-3 border-t border-border pt-6">
+                <h2 className="font-semibold text-purple-600 dark:text-purple-400">🎪 Animaux d'événement</h2>
+                <span className="text-xs text-muted-foreground">{eventItems.length} créature{eventItems.length > 1 ? 's' : ''}</span>
+              </div>
+              {eventLocationGroups.map(({ loc, items: its, totalRemaining }) => (
+                <section key={loc}>
+                  <div className="mb-3 flex items-center gap-3">
+                    <h2 className="font-semibold">{loc}</h2>
+                    <span className="flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+                      <Star className="h-3 w-3 fill-primary" />
+                      {totalRemaining}★ restantes
+                    </span>
+                    <span className="text-xs text-muted-foreground">{its.length} créature{its.length > 1 ? 's' : ''}</span>
+                  </div>
+                  {itemGrid(its)}
+                </section>
+              ))}
+            </>
+          )}
         </div>
       ) : (
-        <section className="mt-6">
-          {itemGrid(filteredItems.slice(0, visibleCount))}
-          <div ref={sentinelRef} className="h-2" />
-          {visibleCount < filteredItems.length && (
-            <div className="flex justify-center py-6">
-              <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
-            </div>
+        <div className="mt-6 space-y-10">
+          {regularItems.length > 0 && (
+            <section>
+              {itemGrid(regularItems.slice(0, visibleCount))}
+              <div ref={sentinelRef} className="h-2" />
+              {visibleCount < regularItems.length && (
+                <div className="flex justify-center py-6">
+                  <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                </div>
+              )}
+            </section>
           )}
-        </section>
+          {eventItems.length > 0 && (
+            <section>
+              <div className="mb-4 flex items-center gap-3 border-t border-border pt-4">
+                <h2 className="font-semibold text-purple-600 dark:text-purple-400">🎪 Animaux d'événement</h2>
+                <span className="text-xs text-muted-foreground">{eventItems.length} créature{eventItems.length > 1 ? 's' : ''}</span>
+              </div>
+              {itemGrid(eventItems)}
+            </section>
+          )}
+        </div>
       )}
     </main>
   )

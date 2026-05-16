@@ -112,10 +112,10 @@ export default function AccountPage() {
     // Stats
     ;(async () => {
       const [fishAll, insectAll, birdAll, collection] = await Promise.all([
-        supabase.from('fish').select('id, passion_level'),
-        supabase.from('insect').select('id, passion_level'),
-        supabase.from('bird').select('id, passion_level'),
-        supabase.from('user_collection').select('item_id, item_type').eq('user_id', user.id),
+        supabase.from('fish').select('id, passion_level').is('event_name', null),
+        supabase.from('insect').select('id, passion_level').is('event_name', null),
+        supabase.from('bird').select('id, passion_level').is('event_name', null),
+        supabase.from('user_collection').select('item_id, item_type').eq('user_id', user.id).eq('ignored', false),
       ])
 
       const caughtIds = new Set(collection.data?.map(r => r.item_id as string) ?? [])

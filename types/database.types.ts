@@ -30,6 +30,7 @@ export interface DbFish {
   sell_price_4_star: number
   sell_price_5_star: number
   special_condition: string | null
+  event_name: string | null
   created_at: string
 }
 
@@ -46,6 +47,7 @@ export interface DbInsect {
   sell_price_3_star: number
   sell_price_4_star: number
   sell_price_5_star: number
+  event_name: string | null
   created_at: string
 }
 
@@ -64,6 +66,7 @@ export interface DbBird {
   sell_price_3_star: number
   sell_price_4_star: number
   sell_price_5_star: number
+  event_name: string | null
   created_at: string
 }
 
@@ -89,6 +92,8 @@ export interface TrackerItem {
   // Oiseau uniquement
   perfect_photo_distance?: string | null
   stretch_time?: string | null
+  // Commun event
+  event_name?: string | null
 }
 
 // ── Adapteurs DB → TrackerItem ────────────────────────────────
@@ -110,6 +115,7 @@ export function fishToTrackerItem(f: DbFish): TrackerItem {
     location_type: f.location_type,
     shadow_size: f.shadow_size,
     special_condition: f.special_condition,
+    event_name: f.event_name,
   }
 }
 
@@ -128,6 +134,7 @@ export function insectToTrackerItem(i: DbInsect): TrackerItem {
     sell_price_3_star: i.sell_price_3_star,
     sell_price_4_star: i.sell_price_4_star,
     sell_price_5_star: i.sell_price_5_star,
+    event_name: i.event_name,
   }
 }
 
@@ -148,6 +155,7 @@ export function birdToTrackerItem(b: DbBird): TrackerItem {
     sell_price_5_star: b.sell_price_5_star,
     perfect_photo_distance: b.perfect_photo_distance,
     stretch_time: b.stretch_time,
+    event_name: b.event_name,
   }
 }
 
@@ -185,5 +193,6 @@ export interface UserCollectionRow {
   item_type: ItemType
   item_id: string
   best_star: number | null
+  ignored: boolean
   caught_at: string
 }

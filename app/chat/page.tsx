@@ -11,6 +11,7 @@ export default async function CatFoodPage() {
   const { data, error } = await supabase
     .from('fish')
     .select('*')
+    .is('event_name', null)
     .order('passion_level', { ascending: true })
     .order('name', { ascending: true })
 

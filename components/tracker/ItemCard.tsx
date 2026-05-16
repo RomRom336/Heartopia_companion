@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { AlertCircle, Coins, Star } from 'lucide-react'
+import { AlertCircle, Coins, EyeOff, Star } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import type { TrackerItem, WeatherType, TimePeriod } from '@/types/database.types'
@@ -33,12 +33,16 @@ export function ItemCard({
   bestStar,
   onStarClick,
   readOnly = false,
+  ignored = false,
+  onIgnore,
   huntInfo,
 }: {
   item: TrackerItem
   bestStar: number | undefined
   onStarClick: (star: number) => void
   readOnly?: boolean
+  ignored?: boolean
+  onIgnore?: () => void
   huntInfo?: {
     color: HuntColor
     label?: string
@@ -68,7 +72,7 @@ export function ItemCard({
 
   return (
     <article className={cn(
-      'group flex flex-col overflow-hidden rounded-xl border shadow-sm transition-all hover:shadow-md',
+      'group/card flex flex-col overflow-hidden rounded-xl border shadow-sm transition-all hover:shadow-md',
       'bg-card', bgClass, borderClass,
     )}>
 
@@ -84,8 +88,7 @@ export function ItemCard({
             onError={() => setImgError(true)}
             className={cn(
               'h-32 w-auto object-contain drop-shadow-[0_4px_10px_rgba(0,0,0,0.15)]',
-              'transition-transform duration-300 group-hover:scale-105',
-              caught ? 'opacity-100' : 'opacity-60 grayscale',
+              'transition-transform duration-300 group-hover/card:scale-105',
             )}
           />
         )}
@@ -101,6 +104,30 @@ export function ItemCard({
           </div>
           <Badge variant="muted" className="shrink-0">{item.type}</Badge>
         </div>
+
+        {/* Événement + bouton ignorer */}
+        {item.event_name && (
+          <div className="flex items-center justify-between gap-2">
+            <Badge variant="outline" className="gap-1 text-purple-600 dark:text-purple-400 border-purple-400/40">
+              🎪 {item.event_name}
+            </Badge>
+            {!readOnly && !bestStar && (
+              <button
+                type="button"
+                title={ignored ? 'Rétablir (ne plus ignorer)' : 'Ignorer (event terminé)'}
+                onClick={onIgnore}
+                className={cn(
+                  'rounded p-1 transition-colors',
+                  ignored
+                    ? 'text-purple-500 hover:text-destructive'
+                    : 'text-muted-foreground/40 hover:text-muted-foreground',
+                )}
+              >
+                <EyeOff className={cn('h-3.5 w-3.5', ignored && 'fill-purple-500/20')} />
+              </button>
+            )}
+          </div>
+        )}
 
         {/* Hunt label */}
         {huntInfo?.label && (
